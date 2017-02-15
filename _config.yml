@@ -9,8 +9,7 @@
 title: Mazhar's Blog
 email: info@mazharAhmed.me
 description: > # this means to ignore newlines until "baseurl:"
-  ZCE, Full Stack LAMP & MEAN Developer, Pythoneer, 
-  Designer, Brander, UI/UX Architect
+  Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://www.iammaze.com" # the base hostname & protocol for your site
 twitter_username: mighty_maze
