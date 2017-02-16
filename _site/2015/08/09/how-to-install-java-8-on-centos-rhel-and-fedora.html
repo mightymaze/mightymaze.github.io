@@ -44,6 +44,12 @@
         
           
         
+          
+        
+          
+        
+          
+        
       </div>
     </nav>
 
@@ -67,42 +73,41 @@
 <p>###Download the Java 8
 Lets keep the java source to our <code class="highlighter-rouge">/opt/</code> directory.</p>
 
-<p>####For 64 Bit Servers
-```
-# cd /opt/
-# wget –no-cookies –no-check-certificate –header “Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie” “http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-x64.tar.gz”</p>
+<p>####For 64 Bit Servers</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># cd /opt/
+# wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-x64.tar.gz"
 
-<h1 id="tar-xzf-jdk-8u40-linux-x64targz">tar xzf jdk-8u40-linux-x64.tar.gz</h1>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-####For 32Bit Servers
+# tar xzf jdk-8u40-linux-x64.tar.gz
 </code></pre>
 </div>
-<p># cd /opt/
-# wget –no-cookies –no-check-certificate –header “Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie” “http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-i586.tar.gz”</p>
 
-<h1 id="tar-xzf-jdk-8u40-linux-i586targz">tar xzf jdk-8u40-linux-i586.tar.gz</h1>
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<p>####For 32Bit Servers</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># cd /opt/
+# wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-i586.tar.gz"
 
-###Install Java 8
-Now install it from the `jdk1.8.0_40` directory.
-
+# tar xzf jdk-8u40-linux-i586.tar.gz
 </code></pre>
 </div>
-<p># cd /opt/jdk1.8.0_40/
-# alternatives –install /usr/bin/java java /opt/jdk1.8.0_40/bin/java 2
-# alternatives –config java</p>
 
-<p>There are 3 programs which provide ‘java’.</p>
+<p>###Install Java 8
+Now install it from the <code class="highlighter-rouge">jdk1.8.0_40</code> directory.</p>
 
-<h2 id="selection----command">Selection    Command</h2>
-<ul>
-  <li>1           /opt/jdk1.8.0/bin/java</li>
-  <li>2           /opt/jdk1.8.0_25/bin/java
-3           /opt/jdk1.8.0_40/bin/java</li>
-</ul>
+<div class="highlighter-rouge"><pre class="highlight"><code># cd /opt/jdk1.8.0_40/
+# alternatives --install /usr/bin/java java /opt/jdk1.8.0_40/bin/java 2
+# alternatives --config java
 
-<p>Enter to keep the current selection[+], or type selection number: 3
-```</p>
+
+There are 3 programs which provide 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*  1           /opt/jdk1.8.0/bin/java
+ + 2           /opt/jdk1.8.0_25/bin/java
+   3           /opt/jdk1.8.0_40/bin/java
+
+Enter to keep the current selection[+], or type selection number: 3
+</code></pre>
+</div>
 
 <p>Now install rest of the utilities.</p>
 
@@ -124,18 +129,18 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.40-b25, mixed mode)
 </div>
 
 <p>###Setup system variables
-Setup JAVA_HOME Variable
-<code class="highlighter-rouge">
-# export JAVA_HOME=/opt/jdk1.8.0_40
-</code>
-Setup JRE_HOME Variable
-<code class="highlighter-rouge">
-# export JRE_HOME=/opt/jdk1.8.0_40/jre
-</code>
-Setup PATH Variable
-<code class="highlighter-rouge">
-# export PATH=$PATH:/opt/jdk1.8.0_40/bin:/opt/jdk1.8.0_40/jre/bin
-</code></p>
+Setup JAVA_HOME Variable</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># export JAVA_HOME=/opt/jdk1.8.0_40
+</code></pre>
+</div>
+<p>Setup JRE_HOME Variable</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># export JRE_HOME=/opt/jdk1.8.0_40/jre
+</code></pre>
+</div>
+<p>Setup PATH Variable</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># export PATH=$PATH:/opt/jdk1.8.0_40/bin:/opt/jdk1.8.0_40/jre/bin
+</code></pre>
+</div>
 
 <p>That’s the end. Now Java 8 is installed on your server.</p>
 
@@ -181,7 +186,7 @@ Setup PATH Variable
       </div>
 
       <div class="footer-col footer-col-3">
-        <p>ZCE, Full Stack LAMP & MEAN Developer, Pythoneer,  Designer, Brander, UI/UX Architect
+        <p>Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
 </p>
       </div>
     </div>

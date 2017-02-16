@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mazhar's Blog</title>
-    <description>ZCE, Full Stack LAMP &amp; MEAN Developer, Pythoneer,  Designer, Brander, UI/UX Architect
+    <description>Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 14 Feb 2017 11:30:49 +0600</pubDate>
-    <lastBuildDate>Tue, 14 Feb 2017 11:30:49 +0600</lastBuildDate>
+    <pubDate>Fri, 17 Feb 2017 01:05:07 +0600</pubDate>
+    <lastBuildDate>Fri, 17 Feb 2017 01:05:07 +0600</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
@@ -194,42 +194,41 @@ This is quite easy and I thing most of the people will use this method. Just Pla
 &lt;p&gt;###Download the Java 8
 Lets keep the java source to our &lt;code class=&quot;highlighter-rouge&quot;&gt;/opt/&lt;/code&gt; directory.&lt;/p&gt;
 
-&lt;p&gt;####For 64 Bit Servers
-```
-# cd /opt/
-# wget –no-cookies –no-check-certificate –header “Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie” “http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-x64.tar.gz”&lt;/p&gt;
+&lt;p&gt;####For 64 Bit Servers&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# cd /opt/
+# wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-x64.tar.gz&quot;
 
-&lt;h1 id=&quot;tar-xzf-jdk-8u40-linux-x64targz&quot;&gt;tar xzf jdk-8u40-linux-x64.tar.gz&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-####For 32Bit Servers
+# tar xzf jdk-8u40-linux-x64.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;# cd /opt/
-# wget –no-cookies –no-check-certificate –header “Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie” “http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-i586.tar.gz”&lt;/p&gt;
 
-&lt;h1 id=&quot;tar-xzf-jdk-8u40-linux-i586targz&quot;&gt;tar xzf jdk-8u40-linux-i586.tar.gz&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;p&gt;####For 32Bit Servers&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# cd /opt/
+# wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/8u40-b25/jdk-8u40-linux-i586.tar.gz&quot;
 
-###Install Java 8
-Now install it from the `jdk1.8.0_40` directory.
-
+# tar xzf jdk-8u40-linux-i586.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;# cd /opt/jdk1.8.0_40/
-# alternatives –install /usr/bin/java java /opt/jdk1.8.0_40/bin/java 2
-# alternatives –config java&lt;/p&gt;
 
-&lt;p&gt;There are 3 programs which provide ‘java’.&lt;/p&gt;
+&lt;p&gt;###Install Java 8
+Now install it from the &lt;code class=&quot;highlighter-rouge&quot;&gt;jdk1.8.0_40&lt;/code&gt; directory.&lt;/p&gt;
 
-&lt;h2 id=&quot;selection----command&quot;&gt;Selection    Command&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;1           /opt/jdk1.8.0/bin/java&lt;/li&gt;
-  &lt;li&gt;2           /opt/jdk1.8.0_25/bin/java
-3           /opt/jdk1.8.0_40/bin/java&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# cd /opt/jdk1.8.0_40/
+# alternatives --install /usr/bin/java java /opt/jdk1.8.0_40/bin/java 2
+# alternatives --config java
 
-&lt;p&gt;Enter to keep the current selection[+], or type selection number: 3
-```&lt;/p&gt;
+
+There are 3 programs which provide 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*  1           /opt/jdk1.8.0/bin/java
+ + 2           /opt/jdk1.8.0_25/bin/java
+   3           /opt/jdk1.8.0_40/bin/java
+
+Enter to keep the current selection[+], or type selection number: 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Now install rest of the utilities.&lt;/p&gt;
 
@@ -251,18 +250,18 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.40-b25, mixed mode)
 &lt;/div&gt;
 
 &lt;p&gt;###Setup system variables
-Setup JAVA_HOME Variable
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-# export JAVA_HOME=/opt/jdk1.8.0_40
-&lt;/code&gt;
-Setup JRE_HOME Variable
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-# export JRE_HOME=/opt/jdk1.8.0_40/jre
-&lt;/code&gt;
-Setup PATH Variable
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-# export PATH=$PATH:/opt/jdk1.8.0_40/bin:/opt/jdk1.8.0_40/jre/bin
-&lt;/code&gt;&lt;/p&gt;
+Setup JAVA_HOME Variable&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# export JAVA_HOME=/opt/jdk1.8.0_40
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Setup JRE_HOME Variable&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# export JRE_HOME=/opt/jdk1.8.0_40/jre
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Setup PATH Variable&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# export PATH=$PATH:/opt/jdk1.8.0_40/bin:/opt/jdk1.8.0_40/jre/bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;That’s the end. Now Java 8 is installed on your server.&lt;/p&gt;
 </description>
@@ -312,11 +311,11 @@ To enable IPv6 support we need to modify the &lt;strong&gt;/etc/default/ufw&lt;/
 &lt;pre class=&quot;brush:shell;&quot;&gt;
 $ sudo vi /etc/default/ufw
 &lt;/pre&gt;
-&lt;p&gt;Then make sure “IPV6” is set to “yes”, like:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-IPV6=yes
-&lt;/code&gt;
-Now restart the UFW.&lt;/p&gt;
+&lt;p&gt;Then make sure “IPV6” is set to “yes”, like:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;IPV6=yes
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now restart the UFW.&lt;/p&gt;
 
 &lt;p&gt;###Setup defaults
 After installing and starting the UFW, the first task is to setup the default rules. To deny all incoming and outgoing connections I have executed:&lt;/p&gt;

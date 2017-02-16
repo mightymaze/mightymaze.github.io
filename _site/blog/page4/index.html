@@ -6,11 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>MongoDB complex query in Node.JS</title>
-  <meta name="description" content="As you guys already know that MongoDB isn’t suitable for complex queries. There are couple of ways to do it like Map-Reduce. But they will turn the whole app...">
+  <title>Mazhar's Blog</title>
+  <meta name="description" content="Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
+">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2014/07/01/mongodb-complex-query-in-node-js.html">
+  <link rel="canonical" href="http://localhost:4000/blog/page4/">
   <link rel="alternate" type="application/rss+xml" title="Mazhar's Blog" href="http://localhost:4000/feed.xml">
 </head>
 
@@ -60,86 +61,151 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <div class="home">
 
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">MongoDB complex query in Node.JS</h1>
-    <p class="post-meta"><time datetime="2014-07-01T17:37:30+06:00" itemprop="datePublished">Jul 1, 2014</time></p>
-  </header>
+  <h1 class="page-heading">Posts</h1>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>As you guys already know that MongoDB isn’t suitable for complex queries. There are couple of ways to do it like Map-Reduce. But they will turn the whole application slow. So we can’t do that as we use MongoDB and Node.JS for couple of facilities and speed is one of them. So the best solution is to do it programmatically. Let’s see how to do it.</p>
+  <ul class="post-list">
+    
+    <h1><a href="/2014/05/04/working-with-cocoapods.html">Working with Cocoapods</a></h1>
+    <p class="author">
+      <span class="date">2014-05-04 03:21:15 +0600</span>
+    </p>
+    <div>
+    
+        <p>First of all, what is Cocoapods!!</p>
 
-<p>Suppose we’ve two MongoDB collections like:</p>
 
-<p><strong>Stores</strong></p>
-<pre class="brush: sql;">
-{
-    "id": "id",
-    "name": "store name",
-    ...
-}
+    
+    </div>
+    
+    <h1><a href="/2014/04/19/backup-system-in-wiredtree.html">Backup system in Wiredtree</a></h1>
+    <p class="author">
+      <span class="date">2014-04-19 17:08:34 +0600</span>
+    </p>
+    <div>
+    
+        <p><img src="/content/images/2014/Apr/tree.gif" alt="wiredtree" /></p>
+
+
+    
+    </div>
+    
+    <h1><a href="/2014/04/10/openssl-vulnerability.html">OpenSSL vulnerability</a></h1>
+    <p class="author">
+      <span class="date">2014-04-10 03:14:24 +0600</span>
+    </p>
+    <div>
+    
+        <p>Recently there is a security bug found in OpenSSL which is present for 2 years and we were totally unaware of it.</p>
+
+
+    
+    </div>
+    
+    <h1><a href="/2014/04/09/how-to-install-and-uninstall-nginx.html">How to Install and Uninstall nginx</a></h1>
+    <p class="author">
+      <span class="date">2014-04-09 05:43:14 +0600</span>
+    </p>
+    <div>
+    
+        <p>Install</p>
+<pre class="brush: shell;">
+cd /usr/local/src
+wget http://nginxcp.com/nginxadmin2.3-stable.tar
+tar xf nginxadmin2.3-stable.tar
+cd publicnginx
+./nginxinstaller install
 </pre>
 
-<p><strong>Extras</strong></p>
-<pre class="brush: sql;">
-{
-    "id": "id",
-    "store": "store id here",
-    "address": "store address here",
-    ...
-}
-</pre>
 
-<p>So, now we wanna join the two tables to gather the total information about the store. Now let’s do our homework, let’s try to do this.</p>
+    
+    </div>
+    
+    <h1><a href="/2014/04/06/another-html5-boilerplate.html">Another HTML5 Boilerplate</a></h1>
+    <p class="author">
+      <span class="date">2014-04-06 06:24:54 +0600</span>
+    </p>
+    <div>
+    
+        <p>I’ve decided and made another HTML5 boilerplate based on HTML5 Boilerplate.</p>
 
-<p>###Trial 1</p>
 
-<pre class="brush: javascript;">
-// we want our result here
-// var store = ...
-stores.findOne(id, function gotStore(firstRes) {
-	extras.findOne(firstRes.id, function gotExtra(secondRes) {
-		// So we've all data here
-	});
-});
-</pre>
+    
+    </div>
+    
+    <h1><a href="/2014/04/02/nginx-for-mac-os-x-mavericks-in-2-minutes.html">Nginx for Mac OS X Mavericks in 2 minutes</a></h1>
+    <p class="author">
+      <span class="date">2014-04-02 04:03:20 +0600</span>
+    </p>
+    <div>
+    
+        <p>Actually the post is <a href="http://kevinworthington.com/nginx-for-mac-os-x-mavericks-in-2-minutes/" target="_blank">here</a></p>
 
-<p>Now the problem is how to sync the process so that we can get the data and don’t get the NULL. So this system isn’t working as we are getting NULL at the end. Let’s see what we can do with it.</p>
 
-<p>###Trial 2</p>
+    
+    </div>
+    
+    <h1><a href="/2014/03/31/installing-nginx-on-a-mac.html">Installing nginx on a Mac</a></h1>
+    <p class="author">
+      <span class="date">2014-03-31 05:45:52 +0600</span>
+    </p>
+    <div>
+    
+        <p>Our web applications were using Apache. But for performance optimization we needed to take it in nginx server. So I decided to install nginx on my MacBook Pro before going live to see if our application works well in the new web server.</p>
 
-<p>As we are using Node.js 0.10 we can’t use generators. Let’s go deep in the callback hell.</p>
 
-<pre class="brush: javascript;">
-function getStore(id, callback) {
-    stores.findOne(id, function gotStore(firstRes) {
-	    extras.findOne(firstRes.id, function gotExtra(secondRes) {
-	    	// So we've all data here
-	    	var result = firstRes.concat(secondRes)
-	    	callback(result);
-	    });
-    });
-}
-</pre>
+    
+    </div>
+    
+    <h1><a href="/2014/03/27/hello-world.html">Hello World</a></h1>
+    <p class="author">
+      <span class="date">2014-03-27 15:52:23 +0600</span>
+    </p>
+    <div>
+    
+        <p><img src="/content/images/2014/Mar/ts3.png" alt="" />
+This is my first post on the Ghost Platform.</p>
 
-<p>So now we are getting the values asynchronously we can do our job like this:</p>
 
-<pre class="brush: javascript;">
-getStore(100, function printStore(store) {
-    console.log (store.name);
-});
-</pre>
+    
+    </div>
+    
+  </ul>
 
-<p>There is almost 4 callback functions. That’s Okay for this sample as this sample is short. Real projects are too big and there will be a mess of callback functions. This is called Callback hell.</p>
+  
+  <div class="pagination">
+    
+      <a href="/blog/page3/">&laquo; Prev</a>
+    
 
-<p>There are couple of ways to deal with Callback hell. Read my article about <a href="http://mazharahmed.me/solve-callback-hell-in-node-js/">solving Callback Hell in Node.js</a></p>
+    
+      
+        <a href="/blog/page3/">1</a>
+      
+    
+      
+        <a href="/blog/page2/">2</a>
+      
+    
+      
+        <a href="/blog/page3/">3</a>
+      
+    
+      
+        <em>4</em>
+      
+    
 
-<p>Thanks. Good luck with your own work.</p>
-
+    
+      <span>Next &raquo;</span>
+    
   </div>
+  
 
-</article>
+  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+
+</div>
 
       </div>
     </div>
