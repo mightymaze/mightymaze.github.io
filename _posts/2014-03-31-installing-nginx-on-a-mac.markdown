@@ -2,6 +2,7 @@
 layout: post
 title: Installing nginx on a Mac
 date: '2014-03-31 05:45:52'
+categories: unix
 tags:
 - nginx
 - mac

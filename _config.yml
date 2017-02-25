@@ -20,6 +20,6 @@ markdown: kramdown
 paginate: 10
 paginate_path: "/blog/page:num/"
 
-gems: [jekyll-paginate]
+gems: [jekyll-paginate, jekyll-seo-tag, jemoji]
 
 #theme: jekyll-theme-architect
