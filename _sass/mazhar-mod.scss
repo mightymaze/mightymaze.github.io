@@ -1,0 +1,54 @@
+// modified CSS here
+
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Quicksand', sans-serif;
+  text-indent: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+h1 {
+  font-size: 26px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+header {
+  h2 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: lighter;
+  }
+}
+
+#main-content {
+  h1 {
+    font-size: 26px;
+    font-family: 'Quicksand', sans-serif;
+
+    &:before {
+      display: none;
+    }
+  }
+}

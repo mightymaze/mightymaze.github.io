@@ -22,4 +22,4 @@ paginate_path: "/blog/page:num/"
 
 gems: [jekyll-paginate]
 
-theme: jekyll-theme-architect
+#theme: jekyll-theme-architect
