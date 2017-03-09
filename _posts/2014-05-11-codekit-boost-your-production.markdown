@@ -15,7 +15,7 @@ tags:
 - typescript
 ---
 
-![alt](/content/images/2014/Apr/codekit.jpg)
+![alt]({{ site.url }}/assets/images/2014/Apr/codekit.jpg)
 I've seen an awesome software for Mac. And it's CodeKit. Some of you may know about this from before as it's version 2 of this software. But as I'm too impressed I'm gonna describe a little of it. And it's not too costly, only $29 for this awesome app.
 
 ####What it actually does?

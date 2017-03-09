@@ -7,7 +7,7 @@ tags:
 - php
 ---
 
-![alt](/content/images/2015/Jan/blog.png)
+![alt]({{ site.url }}/assets/images/2015/Jan/blog.png)
 
 Once in a project client asked us to re-size and watermark an image after uploading. The system was huge and written in many languages. We decided to write this part in PHP so that we can use GD library.
 

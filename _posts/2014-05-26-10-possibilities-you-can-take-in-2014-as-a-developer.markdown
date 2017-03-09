@@ -14,7 +14,7 @@ tags:
 - search
 ---
 
-![Nixon, the amazing developer](/content/images/2014/May/1515338_472676402841010_1511890151_n.jpg)
+![Nixon, the amazing developer]({{ site.url }}/assets/images/2014/May/1515338_472676402841010_1511890151_n.jpg)
 
 Every new technology comes with a hope, possibility and of course a target environment with a predefined solution. There are lots of things in which you can invest your time. But as there are almost hundreds of them (even more) it's wise to work smartly rather work hard blindly.
 

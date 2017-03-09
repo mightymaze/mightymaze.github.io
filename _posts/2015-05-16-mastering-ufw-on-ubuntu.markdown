@@ -10,7 +10,7 @@ A month before, I have purchased a node in Digital Ocean. I have to admit it, th
 
 After having my droplet booted up, there are a lot of work to do. I started with installing the UFW.
 
-![](/content/images/2015/May/Firewall-Installation6.jpg)
+![]({{ site.url }}/assets/images/2015/May/Firewall-Installation6.jpg)
 
 ###What is UFW?
 UFW stands for Uncomplicated Firewall, is a front-end to iptables. It will manage your firewall while providing a very easy interface. It's supported and popular on most of the Linux distos.

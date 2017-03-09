@@ -9,7 +9,7 @@ tags:
 - js
 ---
 
-![alt](/content/images/2015/Mar/4995737599_0f6f878846_z.jpg)
+![alt]({{ site.url }}/assets/images/2015/Mar/4995737599_0f6f878846_z.jpg)
 
 Actually I wrote more than 66K lines of codes, But I've removed the view files code because they are not mine. Writing 66K lines of code doesn't mean anything special. Anyone can write tons of lines of codes. What matters is writing production level of codes. Codes that construct a product which people will pay to use.
 

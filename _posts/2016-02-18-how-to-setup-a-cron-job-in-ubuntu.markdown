@@ -8,7 +8,7 @@ tags:
 
 Most of my friends ask me how to setup a cron job in Ubuntu. They often face this situation when they have to setup a cron job for their application. I myself also work with the cron job feature according to my application's demand. Here is how to setup a cron job in Ubuntu in less than a minute.
 
-![Ubuntu](/content/images/2016/Feb/ubuntu-wallpaper-hq-wallpaper.jpg)
+![Ubuntu]({{ site.url }}/assets/images/2016/Feb/ubuntu-wallpaper-hq-wallpaper.jpg)
 
 You can put a shell script in one of these folders: `/etc/cron.daily`, `/etc/cron.hourly`, `/etc/cron.monthly` or `/etc/cron.weekly`. This should run your script according to the folder name. Such as the scripts in cron.daily folder will be run on daily basis.
 

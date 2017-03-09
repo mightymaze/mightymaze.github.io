@@ -8,7 +8,7 @@ tags:
 - yosemite
 ---
 
-![OSX Yosemit](/content/images/2014/Oct/os_x_yosemite_roundup.jpg)
+![OSX Yosemit]({{ site.url }}/assets/images/2014/Oct/os_x_yosemite_roundup.jpg)
 
 Two or three days ago I upgraded my OSX to the Yosemite. It's pretty awesome (you may complain, but I will ignore). After upgrading my system, I tried to install Phalcon PHP using my Homebrew and I got a problem with libpng. I got an error like this:
 

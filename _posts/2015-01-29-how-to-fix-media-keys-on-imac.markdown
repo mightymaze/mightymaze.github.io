@@ -10,7 +10,7 @@ tags:
 
 This is not actually a problem or anything related to programming. But I faced it so badly and decided to post it in my technical blog. I might need it again, and so for the visitors.
 
-![alt](/content/images/2015/Jan/Screen-Shot-2015-01-29-at-2-03-45-PM-1.png)
+![alt]({{ site.url }}/assets/images/2015/Jan/Screen-Shot-2015-01-29-at-2-03-45-PM-1.png)
 
 At first the media keys worked well with my iTunes. I was happy, but one day it stopped working with iTunes. I was confused. The keyboard was perfect. I realized the problem.
 

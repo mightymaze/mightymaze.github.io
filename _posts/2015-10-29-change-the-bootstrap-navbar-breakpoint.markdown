@@ -10,7 +10,7 @@ tags:
 - sass
 ---
 
-![](/content/images/2015/Oct/Components-B7-Bootstrap.png)
+![]({{ site.url }}/assets/images/2015/Oct/Components-B7-Bootstrap.png)
 
 I use mostly Bootstrap framework for my every projects. Although I like the Foundation framework. If the provided design does not seem proper for any of these framework I used to hard code the rest of the work. I often face a situation like designer wants a different breakpoint to trigger the mobile menu. Suppose a designer wants the mobile menu from the "md" size. This is quite easy in bootstrap. There are two ways of doing this. One is to modify the less source file and recompile it. The second one is directly write CSS codes.
 

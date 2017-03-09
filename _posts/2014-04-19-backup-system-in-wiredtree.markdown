@@ -9,7 +9,7 @@ tags:
 - dedicated
 ---
 
-![wiredtree](/content/images/2014/Apr/tree.gif)
+![wiredtree]({{ site.url }}/assets/images/2014/Apr/tree.gif)
 
 As you already know about Wiredtree and their great support system. Just for those who hasn't yet heard about them "They are awesome hosting provider". Have a look here <a href="http://www.wiredtree.com/" target="_blank">here</a>
 

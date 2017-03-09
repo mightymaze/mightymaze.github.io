@@ -13,7 +13,7 @@ tags:
 ---
 
 
-![Node.js](/content/images/2014/Jun/nodejs_1280x1024.jpg)
+![Node.js]({{ site.url }}/assets/images/2014/Jun/nodejs_1280x1024.jpg)
 
 You may wonder how to upgrade the Node.js to the latest version. There's an easy solution, just download and install again. But that's not a smart way to get the things done. We can use NVM to upgrade the version of Node.js. NVM is Node Version Manager. Here's how to use NVM to install Node.js versions. In this example we will install Node.js version 0.11.13.
 

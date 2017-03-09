@@ -9,7 +9,7 @@ tags:
 
 If you are thinking of what the Phalcon actually is, Phalcon is a web framework implemented as a C extension offering high performance and lower resource consumption.
 
-![alt](/content/images/2014/Sep/phalcon.jpg)
+![alt]({{ site.url }}/assets/images/2014/Sep/phalcon.jpg)
 
 In a simple word, it's a PHP web framework. It should be installed as a PHP module (.so, .dll). Before installing, the module can be compiled from the source. You may wonder why should we do that for! To run Phalcon we need its platform specific compiled file. If we don't get one, then we have no way but to compile it from the source ourselves.
 

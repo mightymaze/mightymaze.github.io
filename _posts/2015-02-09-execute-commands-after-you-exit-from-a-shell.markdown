@@ -8,7 +8,7 @@ tags:
 - linux
 ---
 
-![](/content/images/2015/Feb/Screen-Shot-2015-02-11-at-10-54-07-AM.png)
+![]({{ site.url }}/assets/images/2015/Feb/Screen-Shot-2015-02-11-at-10-54-07-AM.png)
 
 Most of us used to login to a server using an SSH client. Situations happen like this that a process will take a long time to be finished. System software upgrade is an example of this situation. If we start a command and exit the ssh the process will be stopped immediately. You are probably thinking of running the command on background. But even so, exiting from SSH will terminate the execution. So, is there any solution that the command stays running while we quit the SSH client!
 
