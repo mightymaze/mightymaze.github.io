@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand|Nunito:300,400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v="
+          media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!--<title>Mazhar's Blog by </title>-->
+
+    <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Mastering UFW on Ubuntu - Mazhar’s Blog</title>
+<meta property="og:title" content="Mastering UFW on Ubuntu" />
+<meta name="description" content="A month before, I have purchased a node in Digital Ocean. I have to admit it, they are a very good cloud solution provider. From a tiny startup to a large corporate, they have any type of solution. I have chosen Ubuntu 14.4 to go with the Digital Ocean droplet. Why I chose Ubuntu! Because of the vast amount of packages available for it via Aptitude." />
+<meta property="og:description" content="A month before, I have purchased a node in Digital Ocean. I have to admit it, they are a very good cloud solution provider. From a tiny startup to a large corporate, they have any type of solution. I have chosen Ubuntu 14.4 to go with the Digital Ocean droplet. Why I chose Ubuntu! Because of the vast amount of packages available for it via Aptitude." />
+<link rel="canonical" href="http://localhost:4000/mastering-ufw-on-ubuntu" />
+<meta property="og:url" content="http://localhost:4000/mastering-ufw-on-ubuntu" />
+<meta property="og:site_name" content="Mazhar’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-05-16T02:50:22+06:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Mastering UFW on Ubuntu",
+"datePublished": "2015-05-16T02:50:22+06:00",
+"description": "A month before, I have purchased a node in Digital Ocean. I have to admit it, they are a very good cloud solution provider. From a tiny startup to a large corporate, they have any type of solution. I have chosen Ubuntu 14.4 to go with the Digital Ocean droplet. Why I chose Ubuntu! Because of the vast amount of packages available for it via Aptitude.",
+"url": "http://localhost:4000/mastering-ufw-on-ubuntu"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+<header>
+    <div class="inner">
+        <a href="http://localhost:4000/">
+            <h1>Mazhar's Blog</h1>
+        </a>
+        <h2>Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
+</h2>
+        
+    </div>
+</header>
+
+<div id="content-wrapper">
+    <div class="inner clearfix">
+        <section id="main-content">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="post-header">
+    <h1 class="post-title" itemprop="name headline">Mastering UFW on Ubuntu</h1>
+    <p class="post-meta"><time datetime="2015-05-16T02:50:22+06:00" itemprop="datePublished">May 16, 2015</time></p>
+  </div>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>A month before, I have purchased a node in Digital Ocean. I have to admit it, they are a very good cloud solution provider. From a tiny startup to a large corporate, they have any type of solution. I have chosen Ubuntu 14.4 to go with the Digital Ocean droplet. Why I chose Ubuntu! Because of the vast amount of packages available for it via Aptitude.</p>
+
+<p>After having my droplet booted up, there are a lot of work to do. I started with installing the UFW.</p>
+
+<p><img src="http://localhost:4000/assets/images/2015/May/Firewall-Installation6.jpg" alt="" /></p>
+
+<p>###What is UFW?
+UFW stands for Uncomplicated Firewall, is a front-end to iptables. It will manage your firewall while providing a very easy interface. It’s supported and popular on most of the Linux distos.</p>
+
+<p>###How to install UFW
+UFW can be installed using aptitude. The following command will install UFW.</p>
+
+<pre class="brush:shell;">
+$ sudo apt-get install ufw
+</pre>
+
+<p>###Start the UFW
+Current status of UFW can be seen using the command below.</p>
+<pre class="brush:shell;">
+$ sudo ufw status
+</pre>
+
+<p>To start and stop UFW the following commands are used below.</p>
+<pre class="brush:shell;">
+$ sudo ufw enable
+$ sudo ufw disable
+</pre>
+
+<p>###Using IPv6
+To enable IPv6 support we need to modify the <strong>/etc/default/ufw</strong> file.</p>
+<pre class="brush:shell;">
+$ sudo vi /etc/default/ufw
+</pre>
+<p>Then make sure “IPV6” is set to “yes”, like:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>IPV6=yes
+</code></pre>
+</div>
+<p>Now restart the UFW.</p>
+
+<p>###Setup defaults
+After installing and starting the UFW, the first task is to setup the default rules. To deny all incoming and outgoing connections I have executed:</p>
+<pre class="brush:shell;">
+$ sudo ufw default deny incoming
+$ sudo ufw default deny outgoing
+</pre>
+
+<p>if you do not want to be so much restrictive, then you can allow all outgoing connections.</p>
+
+<p>###Some defaults settings
+After done so, I needed to configure UFW to continue working. Like allowing SSH, WWW etc.</p>
+<pre class="brush:shell;">
+$ sudo ufw allow ssh
+$ sudo ufw allow www
+</pre>
+
+<p>If you want to allow other ports, follow the command:</p>
+<pre class="brush:shell;">
+$ sudo ufw allow 8000/tcp
+</pre>
+
+<p>Update your port in place of 8000 and udp if needed in place of tcp. If you need to set rules for port range:</p>
+<pre class="brush:shell;">
+$ sudo ufw allow 8000:9000/tcp
+</pre>
+
+<p>Setting rules for a specific IP address is also possible:</p>
+<pre class="brush:shell;">
+$ sudo ufw allow  from 192.168.255.255
+</pre>
+<p>Update your IP as needed.</p>
+
+<p>###Deny a connection
+Setting rules to deny is almost like the allow command. We need to replace the allow with deny like:</p>
+<pre class="brush:shell;">
+$ sudo ufw deny 8000/tcp
+</pre>
+
+<p>###Deleting an existing rule
+Deleting a rule is also possible.</p>
+<pre class="brush:shell;">
+$ sudo ufw delete allow ssh
+$ sudo ufw delete allow 80/tcp
+$ sudo ufw delete allow 1000:2000/tcp
+</pre>
+<p>If this way of deleting seems difficult to you, then you can get the current rules in a numbered list and use that number to delete the rule like:</p>
+<pre class="brush:shell;">
+$ sudo ufw status numbered
+$ sudo ufw delete [number]
+</pre>
+
+<p>###Problem with APT-GET
+As I have denied all the connection now, apt-get will not work because of UFW. To fix this issue I have added the following rules:</p>
+
+<pre class="brush:shell;">
+ufw allow http
+ufw allow 53
+ufw allow out http
+ufw allow out 53
+</pre>
+
+<p>###RESET everything
+If you need to reset the total configuration then:</p>
+<pre class="brush:shell;">
+$ sudo ufw reset
+</pre>
+
+<p>If you are working on a desktop (not a server), and you have access to a GUI, then you can use GUFW to manage all these settings from a graphical interface. Get it from here <a href="http://gufw.org/">http://gufw.org/</a></p>
+
+<p>That’s it. That’s how to work with UFW on an Ubuntu platform.</p>
+
+  </div>
+
+</article>
+
+        </section>
+
+        <aside id="sidebar">
+            
+
+            
+
+            <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</p>
+
+            <ul class="tags">
+                
+            </ul>
+
+        </aside>
+    </div>
+</div>
+
+
+</body>
+</html>

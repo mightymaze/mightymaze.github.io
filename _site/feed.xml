@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 25 Feb 2017 21:15:35 +0600</pubDate>
-    <lastBuildDate>Sat, 25 Feb 2017 21:15:35 +0600</lastBuildDate>
+    <pubDate>Thu, 09 Mar 2017 20:36:48 +0600</pubDate>
+    <lastBuildDate>Thu, 09 Mar 2017 20:36:48 +0600</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
@@ -28,8 +28,8 @@
 
 </description>
         <pubDate>Thu, 09 Feb 2017 13:35:52 +0600</pubDate>
-        <link>http://localhost:4000/jekyll/update/2017/02/09/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2017/02/09/welcome-to-jekyll.html</guid>
+        <link>http://localhost:4000/welcome-to-jekyll</link>
+        <guid isPermaLink="true">http://localhost:4000/welcome-to-jekyll</guid>
         
         
         <category>jekyll</category>
@@ -61,7 +61,7 @@ Start using the following shell command:&lt;/p&gt;
 
 &lt;p&gt;Please, put your MySQL version name instead of mysql-server-&lt;em&gt;.&lt;/em&gt; . For me I have used mysql-server-5.5 . It will stop the database and promt for reconfiguration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/2016/Feb/GHEyY.png&quot; alt=&quot;dpkg-reconfigure&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2016/Feb/GHEyY.png&quot; alt=&quot;dpkg-reconfigure&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can now enter your new password for the root user and so on. After the reconfiguration is completed the MySQL server will be automatically started.&lt;/p&gt;
 
@@ -72,8 +72,8 @@ Start using the following shell command:&lt;/p&gt;
 &lt;p&gt;That’s all for now. Thank you.&lt;/p&gt;
 </description>
         <pubDate>Sun, 28 Feb 2016 12:58:48 +0600</pubDate>
-        <link>http://localhost:4000/2016/02/28/reset-mysql-root-password-on-ubuntu.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2016/02/28/reset-mysql-root-password-on-ubuntu.html</guid>
+        <link>http://localhost:4000/reset-mysql-root-password-on-ubuntu</link>
+        <guid isPermaLink="true">http://localhost:4000/reset-mysql-root-password-on-ubuntu</guid>
         
         <category>mysql</category>
         
@@ -86,7 +86,7 @@ Start using the following shell command:&lt;/p&gt;
         <title>How to setup a Cron job in Ubuntu</title>
         <description>&lt;p&gt;Most of my friends ask me how to setup a cron job in Ubuntu. They often face this situation when they have to setup a cron job for their application. I myself also work with the cron job feature according to my application’s demand. Here is how to setup a cron job in Ubuntu in less than a minute.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/2016/Feb/ubuntu-wallpaper-hq-wallpaper.jpg&quot; alt=&quot;Ubuntu&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2016/Feb/ubuntu-wallpaper-hq-wallpaper.jpg&quot; alt=&quot;Ubuntu&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can put a shell script in one of these folders: &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/cron.daily&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/cron.hourly&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/cron.monthly&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/cron.weekly&lt;/code&gt;. This should run your script according to the folder name. Such as the scripts in cron.daily folder will be run on daily basis.&lt;/p&gt;
 
@@ -116,8 +116,8 @@ Start using the following shell command:&lt;/p&gt;
 &lt;p&gt;That’s all guys, that’s how to setup a cron job in Ubuntu. Thank you.&lt;/p&gt;
 </description>
         <pubDate>Thu, 18 Feb 2016 02:52:20 +0600</pubDate>
-        <link>http://localhost:4000/2016/02/18/how-to-setup-a-cron-job-in-ubuntu.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2016/02/18/how-to-setup-a-cron-job-in-ubuntu.html</guid>
+        <link>http://localhost:4000/how-to-setup-a-cron-job-in-ubuntu</link>
+        <guid isPermaLink="true">http://localhost:4000/how-to-setup-a-cron-job-in-ubuntu</guid>
         
         <category>linux</category>
         
@@ -126,7 +126,7 @@ Start using the following shell command:&lt;/p&gt;
     
       <item>
         <title>Change the Bootstrap NavBar Breakpoint</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/content/images/2015/Oct/Components-B7-Bootstrap.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Oct/Components-B7-Bootstrap.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I use mostly Bootstrap framework for my every projects. Although I like the Foundation framework. If the provided design does not seem proper for any of these framework I used to hard code the rest of the work. I often face a situation like designer wants a different breakpoint to trigger the mobile menu. Suppose a designer wants the mobile menu from the “md” size. This is quite easy in bootstrap. There are two ways of doing this. One is to modify the less source file and recompile it. The second one is directly write CSS codes.&lt;/p&gt;
 
@@ -171,8 +171,8 @@ This is quite easy and I thing most of the people will use this method. Just Pla
 &lt;p&gt;That’s it, that’s how to change the default Bootstrap NavBar breakpoint.&lt;/p&gt;
 </description>
         <pubDate>Thu, 29 Oct 2015 02:36:05 +0600</pubDate>
-        <link>http://localhost:4000/2015/10/29/change-the-bootstrap-navbar-breakpoint.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/10/29/change-the-bootstrap-navbar-breakpoint.html</guid>
+        <link>http://localhost:4000/change-the-bootstrap-navbar-breakpoint</link>
+        <guid isPermaLink="true">http://localhost:4000/change-the-bootstrap-navbar-breakpoint</guid>
         
         <category>css3</category>
         
@@ -266,8 +266,8 @@ Setup JAVA_HOME Variable&lt;/p&gt;
 &lt;p&gt;That’s the end. Now Java 8 is installed on your server.&lt;/p&gt;
 </description>
         <pubDate>Sun, 09 Aug 2015 02:30:21 +0600</pubDate>
-        <link>http://localhost:4000/2015/08/09/how-to-install-java-8-on-centos-rhel-and-fedora.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/08/09/how-to-install-java-8-on-centos-rhel-and-fedora.html</guid>
+        <link>http://localhost:4000/how-to-install-java-8-on-centos-rhel-and-fedora</link>
+        <guid isPermaLink="true">http://localhost:4000/how-to-install-java-8-on-centos-rhel-and-fedora</guid>
         
         <category>shell</category>
         
@@ -282,7 +282,7 @@ Setup JAVA_HOME Variable&lt;/p&gt;
 
 &lt;p&gt;After having my droplet booted up, there are a lot of work to do. I started with installing the UFW.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/2015/May/Firewall-Installation6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/May/Firewall-Installation6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;###What is UFW?
 UFW stands for Uncomplicated Firewall, is a front-end to iptables. It will manage your firewall while providing a very easy interface. It’s supported and popular on most of the Linux distos.&lt;/p&gt;
@@ -389,8 +389,8 @@ $ sudo ufw reset
 &lt;p&gt;That’s it. That’s how to work with UFW on an Ubuntu platform.&lt;/p&gt;
 </description>
         <pubDate>Sat, 16 May 2015 02:50:22 +0600</pubDate>
-        <link>http://localhost:4000/2015/05/16/mastering-ufw-on-ubuntu.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/05/16/mastering-ufw-on-ubuntu.html</guid>
+        <link>http://localhost:4000/mastering-ufw-on-ubuntu</link>
+        <guid isPermaLink="true">http://localhost:4000/mastering-ufw-on-ubuntu</guid>
         
         <category>linux</category>
         
@@ -399,7 +399,7 @@ $ sudo ufw reset
     
       <item>
         <title>How I wrote 66K lines of JavaScript in 10 days</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/content/images/2015/Mar/4995737599_0f6f878846_z.jpg&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Mar/4995737599_0f6f878846_z.jpg&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Actually I wrote more than 66K lines of codes, But I’ve removed the view files code because they are not mine. Writing 66K lines of code doesn’t mean anything special. Anyone can write tons of lines of codes. What matters is writing production level of codes. Codes that construct a product which people will pay to use.&lt;/p&gt;
 
@@ -420,8 +420,8 @@ $ sudo ufw reset
 &lt;p&gt;Now what’s left is practise, take your skill to the edge. Be a cutting-edge artist. Be a &lt;strong&gt;rock-star coder&lt;/strong&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sat, 28 Mar 2015 03:38:18 +0600</pubDate>
-        <link>http://localhost:4000/2015/03/28/how-i-wrote-66k-lines-of-javascript-in-10-days.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/03/28/how-i-wrote-66k-lines-of-javascript-in-10-days.html</guid>
+        <link>http://localhost:4000/how-i-wrote-66k-lines-of-javascript-in-10-days</link>
+        <guid isPermaLink="true">http://localhost:4000/how-i-wrote-66k-lines-of-javascript-in-10-days</guid>
         
         <category>code</category>
         
@@ -445,8 +445,8 @@ $ sudo ufw reset
 &lt;p&gt;My work is done, I used the file and rebuild the Apache Solr dictionary.&lt;/p&gt;
 </description>
         <pubDate>Wed, 25 Mar 2015 06:45:02 +0600</pubDate>
-        <link>http://localhost:4000/2015/03/25/english-dictionary-text-file.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/03/25/english-dictionary-text-file.html</guid>
+        <link>http://localhost:4000/english-dictionary-text-file</link>
+        <guid isPermaLink="true">http://localhost:4000/english-dictionary-text-file</guid>
         
         <category>mac</category>
         
@@ -457,7 +457,7 @@ $ sudo ufw reset
     
       <item>
         <title>Execute commands after you exit from a shell</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/content/images/2015/Feb/Screen-Shot-2015-02-11-at-10-54-07-AM.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Feb/Screen-Shot-2015-02-11-at-10-54-07-AM.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Most of us used to login to a server using an SSH client. Situations happen like this that a process will take a long time to be finished. System software upgrade is an example of this situation. If we start a command and exit the ssh the process will be stopped immediately. You are probably thinking of running the command on background. But even so, exiting from SSH will terminate the execution. So, is there any solution that the command stays running while we quit the SSH client!&lt;/p&gt;
 
@@ -499,8 +499,8 @@ $ exit
 &lt;p&gt;Now we can exit from the SSH. The command will be running on the server.&lt;/p&gt;
 </description>
         <pubDate>Mon, 09 Feb 2015 10:11:06 +0600</pubDate>
-        <link>http://localhost:4000/2015/02/09/execute-commands-after-you-exit-from-a-shell.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/02/09/execute-commands-after-you-exit-from-a-shell.html</guid>
+        <link>http://localhost:4000/execute-commands-after-you-exit-from-a-shell</link>
+        <guid isPermaLink="true">http://localhost:4000/execute-commands-after-you-exit-from-a-shell</guid>
         
         <category>shell</category>
         
@@ -515,7 +515,7 @@ $ exit
         <title>How to fix media keys on iMac</title>
         <description>&lt;p&gt;This is not actually a problem or anything related to programming. But I faced it so badly and decided to post it in my technical blog. I might need it again, and so for the visitors.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/content/images/2015/Jan/Screen-Shot-2015-01-29-at-2-03-45-PM-1.png&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Jan/Screen-Shot-2015-01-29-at-2-03-45-PM-1.png&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;At first the media keys worked well with my iTunes. I was happy, but one day it stopped working with iTunes. I was confused. The keyboard was perfect. I realized the problem.&lt;/p&gt;
 
@@ -526,8 +526,8 @@ $ exit
 &lt;p&gt;This simple fix saved my months of suffering. Now I can use media keys for iTunes again.&lt;/p&gt;
 </description>
         <pubDate>Thu, 29 Jan 2015 06:12:39 +0600</pubDate>
-        <link>http://localhost:4000/2015/01/29/how-to-fix-media-keys-on-imac.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/01/29/how-to-fix-media-keys-on-imac.html</guid>
+        <link>http://localhost:4000/how-to-fix-media-keys-on-imac</link>
+        <guid isPermaLink="true">http://localhost:4000/how-to-fix-media-keys-on-imac</guid>
         
         <category>mac</category>
         

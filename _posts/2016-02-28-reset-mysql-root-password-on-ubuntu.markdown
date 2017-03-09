@@ -28,7 +28,7 @@ Start using the following shell command:
 
 Please, put your MySQL version name instead of mysql-server-*.* . For me I have used mysql-server-5.5 . It will stop the database and promt for reconfiguration.
 
-![dpkg-reconfigure](/content/images/2016/Feb/GHEyY.png)
+![dpkg-reconfigure]({{ site.url }}/assets/images/2016/Feb/GHEyY.png)
 
 You can now enter your new password for the root user and so on. After the reconfiguration is completed the MySQL server will be automatically started.
 

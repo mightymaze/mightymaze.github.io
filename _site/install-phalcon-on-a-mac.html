@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand|Nunito:300,400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v="
+          media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!--<title>Mazhar's Blog by </title>-->
+
+    <!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>Install Phalcon on a Mac - Mazhar’s Blog</title>
+<meta property="og:title" content="Install Phalcon on a Mac" />
+<meta name="description" content="If you are thinking of what the Phalcon actually is, Phalcon is a web framework implemented as a C extension offering high performance and lower resource consumption." />
+<meta property="og:description" content="If you are thinking of what the Phalcon actually is, Phalcon is a web framework implemented as a C extension offering high performance and lower resource consumption." />
+<link rel="canonical" href="http://localhost:4000/install-phalcon-on-a-mac" />
+<meta property="og:url" content="http://localhost:4000/install-phalcon-on-a-mac" />
+<meta property="og:site_name" content="Mazhar’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-09-27T08:59:54+06:00" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "Install Phalcon on a Mac",
+"datePublished": "2014-09-27T08:59:54+06:00",
+"description": "If you are thinking of what the Phalcon actually is, Phalcon is a web framework implemented as a C extension offering high performance and lower resource consumption.",
+"url": "http://localhost:4000/install-phalcon-on-a-mac"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+<header>
+    <div class="inner">
+        <a href="http://localhost:4000/">
+            <h1>Mazhar's Blog</h1>
+        </a>
+        <h2>Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
+</h2>
+        
+    </div>
+</header>
+
+<div id="content-wrapper">
+    <div class="inner clearfix">
+        <section id="main-content">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="post-header">
+    <h1 class="post-title" itemprop="name headline">Install Phalcon on a Mac</h1>
+    <p class="post-meta"><time datetime="2014-09-27T08:59:54+06:00" itemprop="datePublished">Sep 27, 2014</time></p>
+  </div>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>If you are thinking of what the Phalcon actually is, Phalcon is a web framework implemented as a C extension offering high performance and lower resource consumption.</p>
+
+<p><img src="http://localhost:4000/assets/images/2014/Sep/phalcon.jpg" alt="alt" /></p>
+
+<p>In a simple word, it’s a PHP web framework. It should be installed as a PHP module (.so, .dll). Before installing, the module can be compiled from the source. You may wonder why should we do that for! To run Phalcon we need its platform specific compiled file. If we don’t get one, then we have no way but to compile it from the source ourselves.</p>
+
+<p>Okay, now let’s go to the point. I have a MacBook Pro and I’m using OSX Mavericks. PHP 5.4, Homebrew and Xcode are installed from before. So to install the Phalcon I’ve run:</p>
+
+<pre class="brush: shell;">
+$ brew search phalcon
+$ brew install php54-phalcon
+</pre>
+
+<p>The Phalcon for PHP 5.4 finished the installation process. At the end of the installation I got a message like this:</p>
+
+<pre>
+To finish installing phalcon for PHP 5.4:
+  * /usr/local/etc/php/5.4/conf.d/ext-phalcon.ini was created,
+    do not forget to remove it upon extension removal.
+  * Validate installation via one of the following methods:
+  *
+  * Using PHP from a webserver:
+  * - Restart your webserver.
+  * - Write a PHP page that calls "phpinfo();"
+  * - Load it in a browser and look for the info on the phalcon module.
+  * - If you see it, you have been successful!
+  *
+  * Using PHP from the command line:
+  * - Run "php -i" (command-line "phpinfo()")
+  * - Look for the info on the phalcon module.
+  * - If you see it, you have been successful!
+</pre>
+
+<p>I’ve opened the <code class="highlighter-rouge">/usr/local/etc/php/5.4/conf.d/ext-phalcon.ini</code> file and found:</p>
+
+<pre>
+[phalcon]
+extension="/usr/local/Cellar/php54-phalcon/1.3.1/phalcon.so"
+</pre>
+
+<p>So what I need now is to copy the lines from this file to the end (or somewhere) of my php.ini file. To find where my php.ini is I run:</p>
+
+<pre class="brush: shell;">
+php --ini
+Configuration File (php.ini) Path: /etc
+Loaded Configuration File:         /etc/php.ini
+Scan for additional .ini files in: /Library/Server/Web/Config/php
+Additional .ini files parsed:      (none)
+</pre>
+
+<p>I opened the <code class="highlighter-rouge">/etc/php.ini</code> file and put the two lines at the end of the file and saved it, Thus the module is installed. Now I need to check it if it’s working properly. I’ve created an index.php containing <code class="highlighter-rouge">phpinfo()</code> and run an internal php server like this:</p>
+
+<pre class="brush: shell;">
+$ nano index.php
+
+GNU nano 2.0.6      File: index.php
+&lt;?php
+phpinfo();
+
+$ php -S localhost:3000
+</pre>
+
+<p>Pointing the browser at <code class="highlighter-rouge">localhost:3000</code> I’ve found that the Phalcon module is installed and working perfectly.</p>
+
+<pre>
+phalcon
+
+Phalcon Framework	enabled
+Phalcon Version	1.3.1
+
+Directive	Local Value	Master Value
+phalcon.db.escape_identifiers	On	On
+phalcon.orm.column_renaming	On	On
+phalcon.orm.enable_literals	On	On
+phalcon.orm.events	On	On
+phalcon.orm.exception_on_failed_save	Off	Off
+phalcon.orm.not_null_validations	On	On
+phalcon.orm.virtual_foreign_keys	On	On
+phalcon.register_psr3_classes	Off	Off
+</pre>
+
+<p>That’s it. Now we can run any Phalcon applications from our local server.</p>
+
+  </div>
+
+</article>
+
+        </section>
+
+        <aside id="sidebar">
+            
+
+            
+
+            <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</p>
+
+            <ul class="tags">
+                
+            </ul>
+
+        </aside>
+    </div>
+</div>
+
+
+</body>
+</html>
