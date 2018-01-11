@@ -11,9 +11,10 @@ email: info@mazharAhmed.me
 description: > # this means to ignore newlines until "baseurl:"
   Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://mightymaze.github.io" # the base hostname & protocol for your site
+url: "http://www.mazharahmed.me" # the base hostname & protocol for your site
 twitter_username: mighty_maze
 github_username:  mazhar266
+site.google_analytics: 'UA-48146313-1'
 
 # Build settings
 markdown: kramdown
