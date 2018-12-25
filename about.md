@@ -1,15 +1,15 @@
 ---
-layout: page
 title: About
-permalink: /about/
+layout: page
+permalink: "/about/"
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Hi, I am Mazhar Ahmed. I'm currently the CTO of Systech Unimax Limited which is the mother of TicketChai.com. I previously held the position of Lead Process Engineer of Kona Software Lab Limited (KONA I CO's sister concern) where I worked with Payment networks and gateways.
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jglovier" %} /
-[jekyll-new](https://github.com/jglovier/jekyll-new)
+My qualifications include being a Zend Certified Engineer, I have over more than 10 years experience with technologies and designs. I am experienced in PHP, JavaScript, Java and Python. My previous project at KONA Software Lab requires the use of JAVA. I also have experience managing applications developed on the platforms like Apache Solr, Neo4j, MongoDB and ElasticSearch. In my web development career, I have created TicketChai.com, MadeFreshly.com, DBBL Nexus Pay (a mobile wallet), Art-Mining.com, GuitarMotel.com etc.
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+Other products are like: Joonomy, Meghdoot, KONA ERP, Kona Money, Kona Pocket, Kona Marchant, Kona Resort, Kona Mart, GuitarMotel, TouchBase, MoqBank etc.
+
+Please, feel free to contact me.
+
+Thank you.

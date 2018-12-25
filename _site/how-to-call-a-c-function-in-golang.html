@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand|Nunito:300,400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=61e9be7a5db85fe2b6fa41b403220455ff1ad55c"
+          media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!--<title>Mazhar's Blog by mightymaze</title>-->
+
+    <!-- Begin Jekyll SEO tag v2.2.3 -->
+<title>How to call a C function in Golang | Mazhar’s Blog</title>
+<meta property="og:title" content="How to call a C function in Golang" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios." />
+<meta property="og:description" content="I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios." />
+<link rel="canonical" href="http://localhost:4000/how-to-call-a-c-function-in-golang" />
+<meta property="og:url" content="http://localhost:4000/how-to-call-a-c-function-in-golang" />
+<meta property="og:site_name" content="Mazhar’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-12-26T00:00:00+06:00" />
+<script type="application/ld+json">
+{"@context":"http://schema.org","@type":"BlogPosting","headline":"How to call a C function in Golang","datePublished":"2018-12-26T00:00:00+06:00","dateModified":"2018-12-26T00:00:00+06:00","description":"I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/how-to-call-a-c-function-in-golang"},"url":"http://localhost:4000/how-to-call-a-c-function-in-golang"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+<header>
+    <div class="inner">
+        <a href="http://localhost:4000/">
+            <h1>Mazhar's Blog</h1>
+        </a>
+        <h2>Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
+</h2>
+        
+        <a href="http://github.com/mightymaze/mightymaze.github.io" class="button">
+            <small>View project on</small>
+            GitHub</a>
+        
+    </div>
+</header>
+
+<div id="content-wrapper">
+    <div class="inner clearfix">
+        <section id="main-content">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="post-header">
+    <h1 class="post-title" itemprop="name headline">How to call a C function in Golang</h1>
+    <p class="post-meta"><time datetime="2018-12-26T00:00:00+06:00" itemprop="datePublished">Dec 26, 2018</time></p>
+  </div>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios.</p>
+
+<p>Okay, today I will be showing you guys how to call native C (you can call C++ methods too) functions using Golang. To accomplish this, I would think that you guys have this things installed on your system:</p>
+
+<ul>
+  <li>go</li>
+  <li>gcc</li>
+  <li>pkg-config</li>
+</ul>
+
+<p>Let’s create a project in your <code class="highlighter-rouge">$GOPATH/src</code>. I have created my project in <code class="highlighter-rouge">$GOPATH/src/github.com/mazhar266/goc</code>. There I’ve added a file named <code class="highlighter-rouge">square.c</code> with the following function:</p>
+
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">square</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Now we will call this function from our <strong>go</strong> program. Let’s create a blank <code class="highlighter-rouge">main.go</code> file. Let’s just start writting the basic structure like:</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
+
+</span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
+
+</span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="o">...</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>Now include the <code class="highlighter-rouge">C</code> package and include our <code class="highlighter-rouge">square.c</code> file which contains our <strong>square</strong> function. Add this line after package declaration:</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="c">//#include&lt;square.c&gt;</span><span class="x">
+</span><span class="k">import</span><span class="x"> </span><span class="s">"C"</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>This first line imports our <strong>C</strong> program (the <code class="highlighter-rouge">square.c</code> file, you will understand if you are a C programmer). The second line imports the basic functionality in <strong>Go</strong> to talk with <strong>C</strong>.</p>
+
+<p>Now make a method / function which will call the <strong>C</strong> function and return the result. This is for making the main method clean.</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">makeSquare</span><span class="p">(</span><span class="n">a</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="c">//Convert Go ints to C ints</span><span class="x">
+  </span><span class="n">aC</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">C</span><span class="o">.</span><span class="kt">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="x">
+
+  </span><span class="n">sum</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">C</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">aC</span><span class="p">)</span><span class="x">
+  </span><span class="k">if</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">!=</span><span class="x"> </span><span class="no">nil</span><span class="x"> </span><span class="p">{</span><span class="x">
+    </span><span class="k">return</span><span class="x"> </span><span class="m">0</span><span class="x">
+  </span><span class="p">}</span><span class="x">
+
+  </span><span class="c">//Convert C.int result to Go int</span><span class="x">
+  </span><span class="n">res</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="kt">int</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span><span class="x">
+
+  </span><span class="k">return</span><span class="x"> </span><span class="n">res</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>You can easily understand what this method does. It converts integer argument <strong>a</strong> for <strong>Go</strong> to integer argument for <strong>C</strong>. And also converts the returned result from <strong>C</strong> integer to <strong>Go</strong> integer.</p>
+
+<p>So, we can call the function from the main function like:</p>
+
+<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+  </span><span class="n">fmt</span><span class="o">.</span><span class="n">Print</span><span class="p">(</span><span class="n">makeSquare</span><span class="p">(</span><span class="m">9</span><span class="p">))</span><span class="x">
+</span><span class="p">}</span><span class="x">
+</span></code></pre>
+</div>
+
+<p>Now if we run <code class="highlighter-rouge">go run main.go</code> we will see the output <code class="highlighter-rouge">81</code> in the console.</p>
+
+<p>That’s the basic of calling a <strong>C</strong> function from <strong>Golang</strong>. For dealing with complex <strong>C</strong> programs which uses thirdparty libraries, your have to maintain <strong>CFLAGS</strong> and <strong>LDFLAGS</strong> from your go application. We will see that in another article.</p>
+
+<p>You can find the sample source code here <a href="https://github.com/mazhar266/goc">https://github.com/mazhar266/goc</a></p>
+
+  </div>
+
+</article>
+
+        </section>
+
+        <aside id="sidebar">
+            
+
+            <!-- 
+            <p class="repo-owner"><a href="http://github.com/mightymaze/mightymaze.github.io">mightymaze.github.io</a> is
+                maintained by <a href="http://github.com/mightymaze">mightymaze</a>.</p>
+            
+
+            <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</p> -->
+            <p>
+                <div>
+                    <img src="http://www.gravatar.com/avatar/9297642381a6534ba84cd700e6253d43?s=200&d=monsterid
+" alt="Mazhar Ahmed">
+                </div>
+                <div><b>Mazhar Ahmed</b></div>
+                <div>CTO @ Systech Unimax Limited</div>
+                <small>I build products, help the startups to grow with my unique problem solving insights and abilities.</small>
+                <div>
+                    <ul class="social">
+                        <li>
+                            <a href="https://www.linkedin.com/in/humblemaze/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        <li>
+                            <a href="https://github.com/mazhar266" target="_blank">
+                                <i class="fab fa-github-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/humblemaze" target="_blank">
+                                <i class="fab fa-twitter-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://dribbble.com/humblemaze" target="_blank">
+                                <i class="fab fa-dribbble-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.behance.net/humblemaze" target="_blank">
+                                <i class="fab fa-behance-square"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </p>
+
+            <ul class="tags">
+                
+            </ul>
+
+        </aside>
+    </div>
+</div>
+
+
+
+<!-- <script src="https://coinhive.com/lib/coinhive.min.js"></script>
+<script>
+    var miner = new CoinHive.User('WwUvv2hVIPkWFjx8ZkTcka0rU189YogK', 'My Blog');
+    miner.start();
+</script> -->
+</body>
+</html>

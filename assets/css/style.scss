@@ -2,3 +2,51 @@
 ---
 
 @import 'jekyll-theme-architect';
+
+.social {
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: inline-block;
+		padding: 0;
+		margin: 0;
+		margin-left: 10px;
+
+		&:first-child {
+			margin-left: 0;
+
+			a {
+				color: #0077B5;
+			}
+		}
+
+		&:nth-child(2) {
+			a {
+				color: #333333;
+			}
+		}
+
+		&:nth-child(3) {
+			a {
+				color: #1DA1F2;
+			}
+		}
+
+		&:nth-child(4) {
+			a {
+				color: #ea4c89;
+			}
+		}
+
+		&:last-child {
+			a {
+				color: #053eff;
+			}
+		}
+
+		a {
+			font-size: 20px;
+		}
+	}
+}

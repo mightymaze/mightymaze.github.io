@@ -6,9 +6,24 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 23 May 2017 14:34:09 +0600</pubDate>
-    <lastBuildDate>Tue, 23 May 2017 14:34:09 +0600</lastBuildDate>
+    <pubDate>Wed, 26 Dec 2018 01:20:42 +0600</pubDate>
+    <lastBuildDate>Wed, 26 Dec 2018 01:20:42 +0600</lastBuildDate>
     <generator>Jekyll v3.4.3</generator>
+    
+      <item>
+        <title>How to call a C function in Golang</title>
+        <description>&lt;p&gt;I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 26 Dec 2018 00:00:00 +0600</pubDate>
+        <link>http://localhost:4000/how-to-call-a-c-function-in-golang</link>
+        <guid isPermaLink="true">http://localhost:4000/how-to-call-a-c-function-in-golang</guid>
+        
+        <category>go</category>
+        
+        <category>c</category>
+        
+        
+      </item>
     
       <item>
         <title>Welcome to Jekyll!</title>
@@ -507,33 +522,6 @@ $ exit
         <category>unix</category>
         
         <category>linux</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>How to fix media keys on iMac</title>
-        <description>&lt;p&gt;This is not actually a problem or anything related to programming. But I faced it so badly and decided to post it in my technical blog. I might need it again, and so for the visitors.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Jan/Screen-Shot-2015-01-29-at-2-03-45-PM-1.png&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;At first the media keys worked well with my iTunes. I was happy, but one day it stopped working with iTunes. I was confused. The keyboard was perfect. I realized the problem.&lt;/p&gt;
-
-&lt;p&gt;It’s not the iTunes or keyboard, it’s the Google Chrome and it’s Play Music app. After installing the Google Play Music app on my Google Chrome, the media keys were bound to the Music app only. So any other application can no longer get the media keys when Google Chrome is opened.&lt;/p&gt;
-
-&lt;p&gt;The simple solution what I did is went to &lt;strong&gt;Preferences&lt;/strong&gt; &amp;gt; &lt;strong&gt;Extensions&lt;/strong&gt; &amp;gt; &lt;strong&gt;Keyboard Shortcuts&lt;/strong&gt; in Google Chrome and unbound all media keys. Kept every keyboard shortcuts &lt;strong&gt;Not Set&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;This simple fix saved my months of suffering. Now I can use media keys for iTunes again.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 29 Jan 2015 06:12:39 +0600</pubDate>
-        <link>http://localhost:4000/how-to-fix-media-keys-on-imac</link>
-        <guid isPermaLink="true">http://localhost:4000/how-to-fix-media-keys-on-imac</guid>
-        
-        <category>mac</category>
-        
-        <category>mavericks</category>
-        
-        <category>yosemite</category>
         
         
       </item>
