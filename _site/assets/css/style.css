@@ -425,3 +425,7 @@ header h2 { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: lig
 .social li:nth-child(5) a { color: #ea4c89; }
 .social li:last-child a { color: #053eff; }
 .social li a { font-size: 20px; }
+
+.tag-holder { margin-bottom: 10px; }
+.tag-holder code { display: inline-block; padding: 2px 3px; margin: 1px 0; background-color: #7dbaff !important; border-radius: 5px; -moz-border-radius: 5px; }
+.tag-holder code nobr { color: #fff !important; }
