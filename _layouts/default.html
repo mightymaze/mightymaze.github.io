@@ -42,7 +42,7 @@
         </section>
 
         <aside id="sidebar">
-            {% if site.show_downloads %}
+            <!-- {% if site.show_downloads %}
             <a href="{{ site.github.zip_url }}" class="button">
                 <small>Download</small>
                 .zip file
@@ -51,7 +51,7 @@
                 <small>Download</small>
                 .tar.gz file
             </a>
-            {% endif %}
+            {% endif %} -->
 
             <!-- {% if site.github.is_project_page %}
             <p class="repo-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is
@@ -79,6 +79,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="https://stackoverflow.com/users/288078/mazhar-ahmed" target="_blank">
+                                <i class="fab fa-stack-overflow"></i>
+                            </a>
+                        </li>
+                        <li>
                             <a href="https://twitter.com/humblemaze" target="_blank">
                                 <i class="fab fa-twitter-square"></i>
                             </a>
@@ -97,11 +102,7 @@
                 </div>
             </p>
 
-            <ul class="tags">
-                {% for tag in tags %}
-                <li><a href="#{{ tag | slugify }}"> {{ tag }} </a></li>
-                {% endfor %}
-            </ul>
+            {% include archive.html %}
 
         </aside>
     </div>
