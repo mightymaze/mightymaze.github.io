@@ -6,9 +6,307 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 11 Jan 2019 05:28:58 +0600</pubDate>
-    <lastBuildDate>Fri, 11 Jan 2019 05:28:58 +0600</lastBuildDate>
+    <pubDate>Fri, 11 Jan 2019 06:19:50 +0600</pubDate>
+    <lastBuildDate>Fri, 11 Jan 2019 06:19:50 +0600</lastBuildDate>
     <generator>Jekyll v3.4.3</generator>
+    
+      <item>
+        <title>Your First Web Application with Spock</title>
+        <description>&lt;p&gt;The Spock web framework for Haskell gives you a light but complete foundation to build web servers on, be it for traditional server-side rendered applications, or APIs for single-page applications. Compared to the Scotty framework, Spock is slightly richer in its feature set, and is more opinionated regarding the application architecture. In this episode we explore the basics of Spock and in-memory server state, as we build a note keeper application.&lt;/p&gt;
+
+&lt;h5 id=&quot;show-notes&quot;&gt;Show Notes&lt;/h5&gt;
+&lt;p&gt;We are starting with an empty project called notekeeper, and a Cabal file specifying an executable. To get started, we add dependencies for Spock, http-types, text, and mtl.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-cabal&quot;&gt;name:                notekeeper
+version:             0.1.0.0
+category:            Web
+build-type:          Simple
+cabal-version:       &amp;gt;=1.10
+
+executable notekeeper
+  main-is:            Main.hs
+  build-depends:      base &amp;gt;=4.10 &amp;amp;&amp;amp; &amp;lt;4.11
+                    , Spock
+                    , http-types
+                    , text
+                    , mtl
+  hs-source-dirs:     src
+  default-language:   Haskell2010
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;Main.hs&lt;/code&gt;, we start out by importing the &lt;code class=&quot;highlighter-rouge&quot;&gt;Web.Spock&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Web.Spock.Config&lt;/code&gt; modules. Those are all we need to get a basic server running.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
+
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Web.Spock&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Web.Spock.Config&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The function we need in our definition of &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;runSpock&lt;/code&gt;, which has the type:&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;runSpock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Port&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Middleware&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We run our server on port 8080, with the middleware returned by a function called &lt;code class=&quot;highlighter-rouge&quot;&gt;spock&lt;/code&gt;. It takes a configuration, and our application. We’ll leave those as typed holes for now, and see what we need.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;runSpock&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spock&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_cfg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;_app&lt;/code&gt; hole tells us we need some value of type &lt;code class=&quot;highlighter-rouge&quot;&gt;SpockM conn0 sess0 st0 ()&lt;/code&gt;, which is the Spock monad for defining an application. It also tells us that the type variables used as parameters are ambiguous.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Found hole: _app :: SpockM conn0 sess0 st0 ()
+Where: ‘conn0’ is an ambiguous type variable
+       ‘sess0’ is an ambiguous type variable
+       ‘st0’ is an ambiguous type variable
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;_cfg&lt;/code&gt; hole tells us that we need a value of type &lt;code class=&quot;highlighter-rouge&quot;&gt;SpockCfg conn0 sess0 st0&lt;/code&gt;, and that the same type variables as we saw before are ambiguous. There is a connection between the type parameters of &lt;code class=&quot;highlighter-rouge&quot;&gt;SpockM&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;SpockCfg&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Found hole: _cfg :: SpockCfg conn0 sess0 st0
+Where: ‘conn0’ is an ambiguous type variable
+       ‘sess0’ is an ambiguous type variable
+       ‘st0’ is an ambiguous type variable
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We begin by defining &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; locally, not doing any routing, only returning ().&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;runSpock&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spock&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_cfg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This would work, but the type variables are still ambiguous for the configuration. If we move the definition of &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; to the top-level, and give it an explicit type signature, we can pin down those type arguments.&lt;/p&gt;
+
+&lt;p&gt;The type &lt;code class=&quot;highlighter-rouge&quot;&gt;SpockM&lt;/code&gt; is parameterized by four types:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the database connection type (&lt;code class=&quot;highlighter-rouge&quot;&gt;conn&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;the session type (&lt;code class=&quot;highlighter-rouge&quot;&gt;sess&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;the state type (&lt;code class=&quot;highlighter-rouge&quot;&gt;st&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;the monadic return value’s type&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Initially, we won’t have any database, sessions, or state, so we use the () type for all of them.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SpockM&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now that we’ve specified which types we are using in our application, the typed hole &lt;code class=&quot;highlighter-rouge&quot;&gt;_cfg&lt;/code&gt; has no ambiguous variables. To construct a configuration value, we use the &lt;code class=&quot;highlighter-rouge&quot;&gt;defaultSpockCfg&lt;/code&gt;, taking a session configuration, a pool or connection for a database, and an initial state. The database parameter cannot be a &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt; value, and we’ll leave it as a typed hole to illustrate why.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;Found&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hole&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_db&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;PoolOrConn&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;PoolOrConn is parameterized by &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;, and there is only one value with that type: the &lt;code class=&quot;highlighter-rouge&quot;&gt;PCNoDatabase&lt;/code&gt; constructor defined by Spock. Using that, we obtain a configuration for our Spock application, and we have a rather useless, but working web server.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultSpockCfg&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;PCNoDatabase&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;runSpock&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spock&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To run the web server, and have it reload on source code changes, we can use the excellent &lt;code class=&quot;highlighter-rouge&quot;&gt;ghcid&lt;/code&gt; tool. By default, it only reloads your code and prints any type errors, but if we override the test command using -T, we can have it run the main function when the code successfully compiles.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;ghcid -T :main
+Running test...
+
+Spock is running on port 8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In our web browser, we can see that we get a “404 Not Found” when requesting http://localhost:8080. We’ll keep ghcid running in the background.&lt;/p&gt;
+
+&lt;h5 id=&quot;defining-routes&quot;&gt;Defining Routes&lt;/h5&gt;
+
+&lt;p&gt;Before we begin defining routes, we’ll create a type alias for our application type to factor out the &lt;code class=&quot;highlighter-rouge&quot;&gt;SpockM&lt;/code&gt; details. &lt;code class=&quot;highlighter-rouge&quot;&gt;Server&lt;/code&gt; takes a single type argument &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;, the monadic return value type. We use it as the type of our &lt;code class=&quot;highlighter-rouge&quot;&gt;app&lt;/code&gt; definition.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SpockM&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We define a route for GET requests to the root path, responding with a text greeting.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now we get a type error, explaining that we can’t pass a regular &lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt; to the &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; function. We enable &lt;code class=&quot;highlighter-rouge&quot;&gt;OverloadedStrings&lt;/code&gt; to construct a &lt;code class=&quot;highlighter-rouge&quot;&gt;Text&lt;/code&gt; value instead.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Reloading the web browser, we see our greeting “Hello!” displayed.&lt;/p&gt;
+
+&lt;h5 id=&quot;rendering-html&quot;&gt;Rendering HTML&lt;/h5&gt;
+
+&lt;p&gt;Responding with plain text in a web application is a little dull. Instead, we’ll respond with HTML using the html function, and some lovingly hand-crafted markup.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&amp;lt;h1&amp;gt;Hello!&amp;lt;/h1&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now get a proper heading, at least.&lt;/p&gt;
+
+&lt;p&gt;Constructing HTML markup in strings is not great, though. Instead, we’ll use Lucid, an embedded DSL for HTML markup. In our Cabal file, we add the dependency lucid, along with Spock-lucid, a small library integrating Spock and Lucid.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-cabal&quot;&gt;executable notekeeper
+  main-is:            Main.hs
+  build-depends:      base &amp;gt;=4.10 &amp;amp;&amp;amp; &amp;lt;4.11
+                    , Spock
+                    , http-types
+                    , text
+                    , mtl
+                    , lucid
+                    , Spock-lucid
+  hs-source-dirs:     src
+  default-language:   Haskell2010
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Back in &lt;code class=&quot;highlighter-rouge&quot;&gt;Main.hs&lt;/code&gt;, we import the lucid function from &lt;code class=&quot;highlighter-rouge&quot;&gt;Web.Spock.Lucid&lt;/code&gt;, along with the entire &lt;code class=&quot;highlighter-rouge&quot;&gt;Lucid&lt;/code&gt; module.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Web.Spock.Lucid&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;lucid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Lucid&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now we can use lucid instead of html, and the Lucid DSL to construct our markup. Using do notation, we can define sibling elements, which in our case will be a heading and a paragraph.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lucid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;h1_&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello!&quot;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;p_&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;How are you today?&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Reloading the web browser, we see the two elements rendered.&lt;/p&gt;
+
+&lt;h5 id=&quot;keeping-notes-with-server-state&quot;&gt;Keeping Notes with Server State&lt;/h5&gt;
+
+&lt;p&gt;We are ready to implement the note keeping functionality of our application. Instead of using a server state of type (), we’ll define and use the &lt;code class=&quot;highlighter-rouge&quot;&gt;ServerState&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Note&lt;/code&gt; data types.&lt;/p&gt;
+
+&lt;p&gt;The server state consists of an IORef holding a list of &lt;code class=&quot;highlighter-rouge&quot;&gt;Note&lt;/code&gt; values. An &lt;code class=&quot;highlighter-rouge&quot;&gt;IORef&lt;/code&gt; is a variable that can be mutated atomically in the IO monad.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;newtype&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ServerState&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ServerState&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IORef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;A note has an author, and contents, both of type &lt;code class=&quot;highlighter-rouge&quot;&gt;Text&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Text&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To use Text and IORef we need to import them.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Data.Text&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Data.IORef&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Finally, we change the &lt;code class=&quot;highlighter-rouge&quot;&gt;Server&lt;/code&gt; type alias to use &lt;code class=&quot;highlighter-rouge&quot;&gt;ServerState&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-haskel&quot;&gt;type Server a = SpockM () () ServerState a
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Navigating to the next type error we get, we see that we cannot use an application requiring a state of type ServerState with a configuration with state of type ().&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Couldn't match type ‘ServerState’ with ‘()’
+      Expected type: SpockM () () () ()
+      Actual type: Server ()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We construct a &lt;code class=&quot;highlighter-rouge&quot;&gt;ServerState&lt;/code&gt; by mapping the constructor over a &lt;code class=&quot;highlighter-rouge&quot;&gt;newIORef&lt;/code&gt; action, with an empty list of notes, and use it in our configuration.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ServerState&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newIORef&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;[]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultSpockCfg&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;PCNoDatabase&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;runSpock&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spock&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It compiles again! To have something that we can render, we add two notes to the initial state.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ServerState&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;$&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;newIORef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Alice&quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Must not forget to walk the dog.&quot;&lt;/span&gt;
+             &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Bob&quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Must. Eat. Pizza!&quot;&lt;/span&gt;
+             &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultSpockCfg&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;PCNoDatabase&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;runSpock&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spock&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cfg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now we have something to render, so we change the greeting markup to instead list the notes in our state. We’ll use an unordered list, constructed using &lt;code class=&quot;highlighter-rouge&quot;&gt;ul_&lt;/code&gt;, and for each note render a list item, containing the note author and contents.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lucid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;h1_&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Notes&quot;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;ul_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forM_&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notes'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;note&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;li_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;toHtml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;: &quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;toHtml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;forM_&lt;/code&gt; function is not in scope, so we need to import it.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Control.Monad&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;forM_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Also, we don’t have a list of notes available. We need to read it from the IORef in our server state. The getState action in Spock returns our server state, from which we can extract and read the IORef.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Server&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;notes'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getState&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;readIORef&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;lucid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;h1_&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Notes&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ul_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forM_&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notes'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;note&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;li_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;toHtml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;&quot;: &quot;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;toHtml&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The usage of getState might remind you of ask from the Reader monad.&lt;/p&gt;
+
+&lt;p&gt;The readIORef action has to be lifted into the ActionCtxt, which is the monadic type for Spock routes. Thus, we import and use liftIO.&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Control.Monad.IO.Class&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;liftIO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;No more errors, so we refresh the web browser and see our list of notes rendered.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Jan 2019 00:00:00 +0600</pubDate>
+        <link>http://localhost:4000/your-first-web-application-with-spock</link>
+        <guid isPermaLink="true">http://localhost:4000/your-first-web-application-with-spock</guid>
+        
+        <category>haskell</category>
+        
+        
+      </item>
     
       <item>
         <title>How to call a C function in Golang</title>
@@ -537,62 +835,6 @@ $ sudo ufw reset
         <guid isPermaLink="true">http://localhost:4000/english-dictionary-text-file</guid>
         
         <category>mac</category>
-        
-        <category>linux</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Execute commands after you exit from a shell</title>
-        <description>&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Feb/Screen-Shot-2015-02-11-at-10-54-07-AM.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Most of us used to login to a server using an SSH client. Situations happen like this that a process will take a long time to be finished. System software upgrade is an example of this situation. If we start a command and exit the ssh the process will be stopped immediately. You are probably thinking of running the command on background. But even so, exiting from SSH will terminate the execution. So, is there any solution that the command stays running while we quit the SSH client!&lt;/p&gt;
-
-&lt;p&gt;###Meet the &lt;code class=&quot;highlighter-rouge&quot;&gt;nohup&lt;/code&gt; command&lt;/p&gt;
-
-&lt;p&gt;The answer is obvious, use &lt;strong&gt;nohup&lt;/strong&gt; command line-utility which allows us to run commands or shell script that can continue running in the background after we log out from a shell.&lt;/p&gt;
-
-&lt;p&gt;Use it like:&lt;/p&gt;
-&lt;pre class=&quot;brush:shell;&quot;&gt;
-$ nohup command-goes-here args &amp;amp;
-&lt;/pre&gt;
-
-&lt;p&gt;To view active commands:&lt;/p&gt;
-&lt;pre class=&quot;brush:shell;&quot;&gt;
-$ jobs -l
-&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;nohup&lt;/strong&gt; doesn’t change the scheduling priority of the commands. To change the priority we can use &lt;strong&gt;nice&lt;/strong&gt; command with it.&lt;/p&gt;
-
-&lt;pre class=&quot;brush:shell;&quot;&gt;
-$ nohup nice -n -5 command-here args &amp;amp;
-&lt;/pre&gt;
-
-&lt;p&gt;###Queue the command&lt;/p&gt;
-
-&lt;p&gt;We can schedule the command for later execution on the server. For example, we can run my-shell-script.sh script to queue (one minute) later execution:&lt;/p&gt;
-&lt;pre class=&quot;brush:shell;&quot;&gt;
-$ echo &quot;my-shell-script.sh&quot; | at now + 1 minute
-&lt;/pre&gt;
-
-&lt;p&gt;###Learn to &lt;code class=&quot;highlighter-rouge&quot;&gt;disown&lt;/code&gt; the shell
-We can also use screen command for same purpose. The disown shell internal command can do it for us. Here is how you can try it out:&lt;/p&gt;
-&lt;pre class=&quot;brush:shell;&quot;&gt;
-$ pullftp.sh &amp;amp;
-$ disown -h
-$ exit
-&lt;/pre&gt;
-
-&lt;p&gt;Now we can exit from the SSH. The command will be running on the server.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 09 Feb 2015 10:11:06 +0600</pubDate>
-        <link>http://localhost:4000/execute-commands-after-you-exit-from-a-shell</link>
-        <guid isPermaLink="true">http://localhost:4000/execute-commands-after-you-exit-from-a-shell</guid>
-        
-        <category>shell</category>
-        
-        <category>unix</category>
         
         <category>linux</category>
         

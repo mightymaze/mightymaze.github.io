@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand|Nunito:300,400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=cc13f7994f01b1e9fdde40b0ccddbc097c728598"
+          media="screen" type="text/css">
+    <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!--<title>Mazhar's Blog by mightymaze</title>-->
+
+    <!-- Begin Jekyll SEO tag v2.2.3 -->
+<title>Your First Web Application with Spock | Mazhar’s Blog</title>
+<meta property="og:title" content="Your First Web Application with Spock" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Spock web framework for Haskell gives you a light but complete foundation to build web servers on, be it for traditional server-side rendered applications, or APIs for single-page applications. Compared to the Scotty framework, Spock is slightly richer in its feature set, and is more opinionated regarding the application architecture. In this episode we explore the basics of Spock and in-memory server state, as we build a note keeper application." />
+<meta property="og:description" content="The Spock web framework for Haskell gives you a light but complete foundation to build web servers on, be it for traditional server-side rendered applications, or APIs for single-page applications. Compared to the Scotty framework, Spock is slightly richer in its feature set, and is more opinionated regarding the application architecture. In this episode we explore the basics of Spock and in-memory server state, as we build a note keeper application." />
+<link rel="canonical" href="http://localhost:4000/your-first-web-application-with-spock" />
+<meta property="og:url" content="http://localhost:4000/your-first-web-application-with-spock" />
+<meta property="og:site_name" content="Mazhar’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-11T00:00:00+06:00" />
+<script type="application/ld+json">
+{"@context":"http://schema.org","@type":"BlogPosting","headline":"Your First Web Application with Spock","datePublished":"2019-01-11T00:00:00+06:00","dateModified":"2019-01-11T00:00:00+06:00","description":"The Spock web framework for Haskell gives you a light but complete foundation to build web servers on, be it for traditional server-side rendered applications, or APIs for single-page applications. Compared to the Scotty framework, Spock is slightly richer in its feature set, and is more opinionated regarding the application architecture. In this episode we explore the basics of Spock and in-memory server state, as we build a note keeper application.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/your-first-web-application-with-spock"},"url":"http://localhost:4000/your-first-web-application-with-spock"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+<header>
+    <div class="inner">
+        <a href="http://localhost:4000/">
+            <h1>Mazhar's Blog</h1>
+        </a>
+        <h2>Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander
+</h2>
+        
+        <a href="http://github.com/mightymaze/mightymaze.github.io" class="button">
+            <small>View project on</small>
+            GitHub</a>
+        
+    </div>
+</header>
+
+<div id="content-wrapper">
+    <div class="inner clearfix">
+        <section id="main-content">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="post-header">
+    <h1 class="post-title" itemprop="name headline">Your First Web Application with Spock</h1>
+    <p class="post-meta"><time datetime="2019-01-11T00:00:00+06:00" itemprop="datePublished">Jan 11, 2019</time></p>
+  </div>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>The Spock web framework for Haskell gives you a light but complete foundation to build web servers on, be it for traditional server-side rendered applications, or APIs for single-page applications. Compared to the Scotty framework, Spock is slightly richer in its feature set, and is more opinionated regarding the application architecture. In this episode we explore the basics of Spock and in-memory server state, as we build a note keeper application.</p>
+
+<h5 id="show-notes">Show Notes</h5>
+<p>We are starting with an empty project called notekeeper, and a Cabal file specifying an executable. To get started, we add dependencies for Spock, http-types, text, and mtl.</p>
+
+<pre><code class="language-cabal">name:                notekeeper
+version:             0.1.0.0
+category:            Web
+build-type:          Simple
+cabal-version:       &gt;=1.10
+
+executable notekeeper
+  main-is:            Main.hs
+  build-depends:      base &gt;=4.10 &amp;&amp; &lt;4.11
+                    , Spock
+                    , http-types
+                    , text
+                    , mtl
+  hs-source-dirs:     src
+  default-language:   Haskell2010
+</code></pre>
+
+<p>In <code class="highlighter-rouge">Main.hs</code>, we start out by importing the <code class="highlighter-rouge">Web.Spock</code> and <code class="highlighter-rouge">Web.Spock.Config</code> modules. Those are all we need to get a basic server running.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">module</span> <span class="nn">Main</span> <span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">Web.Spock</span>
+<span class="kr">import</span> <span class="nn">Web.Spock.Config</span>
+</code></pre>
+</div>
+
+<p>The function we need in our definition of <code class="highlighter-rouge">main</code> is <code class="highlighter-rouge">runSpock</code>, which has the type:</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">runSpock</span> <span class="o">::</span> <span class="kt">Port</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="kt">Middleware</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+</code></pre>
+</div>
+
+<p>We run our server on port 8080, with the middleware returned by a function called <code class="highlighter-rouge">spock</code>. It takes a configuration, and our application. We’ll leave those as typed holes for now, and see what we need.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">runSpock</span> <span class="mi">8080</span> <span class="p">(</span><span class="n">spock</span> <span class="n">_cfg</span> <span class="n">_app</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">_app</code> hole tells us we need some value of type <code class="highlighter-rouge">SpockM conn0 sess0 st0 ()</code>, which is the Spock monad for defining an application. It also tells us that the type variables used as parameters are ambiguous.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Found hole: _app :: SpockM conn0 sess0 st0 ()
+Where: ‘conn0’ is an ambiguous type variable
+       ‘sess0’ is an ambiguous type variable
+       ‘st0’ is an ambiguous type variable
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">_cfg</code> hole tells us that we need a value of type <code class="highlighter-rouge">SpockCfg conn0 sess0 st0</code>, and that the same type variables as we saw before are ambiguous. There is a connection between the type parameters of <code class="highlighter-rouge">SpockM</code> and <code class="highlighter-rouge">SpockCfg</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Found hole: _cfg :: SpockCfg conn0 sess0 st0
+Where: ‘conn0’ is an ambiguous type variable
+       ‘sess0’ is an ambiguous type variable
+       ‘st0’ is an ambiguous type variable
+</code></pre>
+</div>
+
+<p>We begin by defining <code class="highlighter-rouge">app</code> locally, not doing any routing, only returning ().</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="kr">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">return</span> <span class="nb">()</span>
+  <span class="n">runSpock</span> <span class="mi">8080</span> <span class="p">(</span><span class="n">spock</span> <span class="n">_cfg</span> <span class="n">app</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>This would work, but the type variables are still ambiguous for the configuration. If we move the definition of <code class="highlighter-rouge">app</code> to the top-level, and give it an explicit type signature, we can pin down those type arguments.</p>
+
+<p>The type <code class="highlighter-rouge">SpockM</code> is parameterized by four types:</p>
+
+<ul>
+  <li>the database connection type (<code class="highlighter-rouge">conn</code>)</li>
+  <li>the session type (<code class="highlighter-rouge">sess</code>)</li>
+  <li>the state type (<code class="highlighter-rouge">st</code>)</li>
+  <li>the monadic return value’s type</li>
+</ul>
+
+<p>Initially, we won’t have any database, sessions, or state, so we use the () type for all of them.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">app</span> <span class="o">::</span> <span class="kt">SpockM</span> <span class="nb">()</span> <span class="nb">()</span> <span class="nb">()</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">return</span> <span class="nb">()</span>
+</code></pre>
+</div>
+
+<p>Now that we’ve specified which types we are using in our application, the typed hole <code class="highlighter-rouge">_cfg</code> has no ambiguous variables. To construct a configuration value, we use the <code class="highlighter-rouge">defaultSpockCfg</code>, taking a session configuration, a pool or connection for a database, and an initial state. The database parameter cannot be a <code class="highlighter-rouge">()</code> value, and we’ll leave it as a typed hole to illustrate why.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kt">Found</span> <span class="n">hole</span><span class="o">:</span> <span class="n">_db</span> <span class="o">::</span> <span class="kt">PoolOrConn</span> <span class="nb">()</span>
+</code></pre>
+</div>
+
+<p>PoolOrConn is parameterized by <code class="highlighter-rouge">()</code>, and there is only one value with that type: the <code class="highlighter-rouge">PCNoDatabase</code> constructor defined by Spock. Using that, we obtain a configuration for our Spock application, and we have a rather useless, but working web server.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">cfg</span> <span class="o">&lt;-</span> <span class="n">defaultSpockCfg</span> <span class="nb">()</span> <span class="kt">PCNoDatabase</span> <span class="nb">()</span>
+  <span class="n">runSpock</span> <span class="mi">8080</span> <span class="p">(</span><span class="n">spock</span> <span class="n">cfg</span> <span class="n">app</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>To run the web server, and have it reload on source code changes, we can use the excellent <code class="highlighter-rouge">ghcid</code> tool. By default, it only reloads your code and prints any type errors, but if we override the test command using -T, we can have it run the main function when the code successfully compiles.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>ghcid -T :main
+Running test...
+
+Spock is running on port 8080
+</code></pre>
+</div>
+
+<p>In our web browser, we can see that we get a “404 Not Found” when requesting http://localhost:8080. We’ll keep ghcid running in the background.</p>
+
+<h5 id="defining-routes">Defining Routes</h5>
+
+<p>Before we begin defining routes, we’ll create a type alias for our application type to factor out the <code class="highlighter-rouge">SpockM</code> details. <code class="highlighter-rouge">Server</code> takes a single type argument <code class="highlighter-rouge">a</code>, the monadic return value type. We use it as the type of our <code class="highlighter-rouge">app</code> definition.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">type</span> <span class="kt">Server</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">SpockM</span> <span class="nb">()</span> <span class="nb">()</span> <span class="nb">()</span> <span class="n">a</span>
+
+<span class="n">app</span> <span class="o">::</span> <span class="kt">Server</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">return</span> <span class="nb">()</span>
+</code></pre>
+</div>
+
+<p>We define a route for GET requests to the root path, responding with a text greeting.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">app</span> <span class="o">::</span> <span class="kt">Server</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">get</span> <span class="n">root</span> <span class="p">(</span><span class="n">text</span> <span class="s">"Hello!"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Now we get a type error, explaining that we can’t pass a regular <code class="highlighter-rouge">String</code> to the <code class="highlighter-rouge">text</code> function. We enable <code class="highlighter-rouge">OverloadedStrings</code> to construct a <code class="highlighter-rouge">Text</code> value instead.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="cp">{-# LANGUAGE OverloadedStrings #-}</span>
+</code></pre>
+</div>
+
+<p>Reloading the web browser, we see our greeting “Hello!” displayed.</p>
+
+<h5 id="rendering-html">Rendering HTML</h5>
+
+<p>Responding with plain text in a web application is a little dull. Instead, we’ll respond with HTML using the html function, and some lovingly hand-crafted markup.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">app</span> <span class="o">::</span> <span class="kt">Server</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">get</span> <span class="n">root</span> <span class="p">(</span><span class="n">html</span> <span class="s">"&lt;h1&gt;Hello!&lt;/h1&gt;"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Now get a proper heading, at least.</p>
+
+<p>Constructing HTML markup in strings is not great, though. Instead, we’ll use Lucid, an embedded DSL for HTML markup. In our Cabal file, we add the dependency lucid, along with Spock-lucid, a small library integrating Spock and Lucid.</p>
+
+<pre><code class="language-cabal">executable notekeeper
+  main-is:            Main.hs
+  build-depends:      base &gt;=4.10 &amp;&amp; &lt;4.11
+                    , Spock
+                    , http-types
+                    , text
+                    , mtl
+                    , lucid
+                    , Spock-lucid
+  hs-source-dirs:     src
+  default-language:   Haskell2010
+</code></pre>
+
+<p>Back in <code class="highlighter-rouge">Main.hs</code>, we import the lucid function from <code class="highlighter-rouge">Web.Spock.Lucid</code>, along with the entire <code class="highlighter-rouge">Lucid</code> module.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Web.Spock.Lucid</span> <span class="p">(</span><span class="nf">lucid</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Lucid</span>
+</code></pre>
+</div>
+
+<p>Now we can use lucid instead of html, and the Lucid DSL to construct our markup. Using do notation, we can define sibling elements, which in our case will be a heading and a paragraph.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">app</span> <span class="o">::</span> <span class="kt">Server</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">get</span> <span class="n">root</span> <span class="o">$</span> <span class="n">lucid</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">h1_</span> <span class="s">"Hello!"</span>
+  <span class="n">p_</span> <span class="s">"How are you today?"</span>
+</code></pre>
+</div>
+
+<p>Reloading the web browser, we see the two elements rendered.</p>
+
+<h5 id="keeping-notes-with-server-state">Keeping Notes with Server State</h5>
+
+<p>We are ready to implement the note keeping functionality of our application. Instead of using a server state of type (), we’ll define and use the <code class="highlighter-rouge">ServerState</code> and <code class="highlighter-rouge">Note</code> data types.</p>
+
+<p>The server state consists of an IORef holding a list of <code class="highlighter-rouge">Note</code> values. An <code class="highlighter-rouge">IORef</code> is a variable that can be mutated atomically in the IO monad.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">newtype</span> <span class="kt">ServerState</span> <span class="o">=</span> <span class="kt">ServerState</span> <span class="p">{</span> <span class="n">notes</span> <span class="o">::</span> <span class="kt">IORef</span> <span class="p">[</span><span class="kt">Note</span><span class="p">]</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>A note has an author, and contents, both of type <code class="highlighter-rouge">Text</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Note</span> <span class="o">=</span> <span class="kt">Note</span> <span class="p">{</span> <span class="n">author</span> <span class="o">::</span> <span class="kt">Text</span><span class="p">,</span> <span class="n">contents</span> <span class="o">::</span> <span class="kt">Text</span> <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>To use Text and IORef we need to import them.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Data.Text</span> <span class="p">(</span><span class="kt">Text</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Data.IORef</span>
+</code></pre>
+</div>
+
+<p>Finally, we change the <code class="highlighter-rouge">Server</code> type alias to use <code class="highlighter-rouge">ServerState</code>.</p>
+
+<pre><code class="language-haskel">type Server a = SpockM () () ServerState a
+</code></pre>
+
+<p>Navigating to the next type error we get, we see that we cannot use an application requiring a state of type ServerState with a configuration with state of type ().</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Couldn't match type ‘ServerState’ with ‘()’
+      Expected type: SpockM () () () ()
+      Actual type: Server ()
+</code></pre>
+</div>
+
+<p>We construct a <code class="highlighter-rouge">ServerState</code> by mapping the constructor over a <code class="highlighter-rouge">newIORef</code> action, with an empty list of notes, and use it in our configuration.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">st</span> <span class="o">&lt;-</span> <span class="kt">ServerState</span> <span class="o">&lt;$&gt;</span> <span class="n">newIORef</span> <span class="kt">[]</span>
+  <span class="n">cfg</span> <span class="o">&lt;-</span> <span class="n">defaultSpockCfg</span> <span class="nb">()</span> <span class="kt">PCNoDatabase</span> <span class="n">st</span>
+  <span class="n">runSpock</span> <span class="mi">8080</span> <span class="p">(</span><span class="n">spock</span> <span class="n">cfg</span> <span class="n">app</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>It compiles again! To have something that we can render, we add two notes to the initial state.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">st</span> <span class="o">&lt;-</span> <span class="kt">ServerState</span> <span class="o">&lt;$&gt;</span>
+    <span class="n">newIORef</span> <span class="p">[</span> <span class="kt">Note</span> <span class="s">"Alice"</span> <span class="s">"Must not forget to walk the dog."</span>
+             <span class="p">,</span> <span class="kt">Note</span> <span class="s">"Bob"</span> <span class="s">"Must. Eat. Pizza!"</span>
+             <span class="p">]</span>
+  <span class="n">cfg</span> <span class="o">&lt;-</span> <span class="n">defaultSpockCfg</span> <span class="nb">()</span> <span class="kt">PCNoDatabase</span> <span class="n">st</span>
+  <span class="n">runSpock</span> <span class="mi">8080</span> <span class="p">(</span><span class="n">spock</span> <span class="n">cfg</span> <span class="n">app</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Now we have something to render, so we change the greeting markup to instead list the notes in our state. We’ll use an unordered list, constructed using <code class="highlighter-rouge">ul_</code>, and for each note render a list item, containing the note author and contents.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">app</span> <span class="o">::</span> <span class="kt">Server</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">get</span> <span class="n">root</span> <span class="o">$</span> <span class="n">lucid</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">h1_</span> <span class="s">"Notes"</span>
+  <span class="n">ul_</span> <span class="o">$</span> <span class="n">forM_</span> <span class="n">notes'</span> <span class="o">$</span> <span class="nf">\</span><span class="n">note</span> <span class="o">-&gt;</span> <span class="n">li_</span> <span class="o">$</span> <span class="kr">do</span>
+    <span class="n">toHtml</span> <span class="p">(</span><span class="n">author</span> <span class="n">note</span><span class="p">)</span>
+    <span class="s">": "</span>
+    <span class="n">toHtml</span> <span class="p">(</span><span class="n">contents</span> <span class="n">note</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">forM_</code> function is not in scope, so we need to import it.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Control.Monad</span> <span class="p">(</span><span class="nf">forM_</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Also, we don’t have a list of notes available. We need to read it from the IORef in our server state. The getState action in Spock returns our server state, from which we can extract and read the IORef.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="n">app</span> <span class="o">::</span> <span class="kt">Server</span> <span class="nb">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">get</span> <span class="n">root</span> <span class="o">$</span> <span class="kr">do</span>
+  <span class="n">notes'</span> <span class="o">&lt;-</span> <span class="n">getState</span> <span class="o">&gt;&gt;=</span> <span class="p">(</span><span class="n">liftIO</span> <span class="o">.</span> <span class="n">readIORef</span> <span class="o">.</span> <span class="n">notes</span><span class="p">)</span>
+  <span class="n">lucid</span> <span class="o">$</span> <span class="kr">do</span>
+    <span class="n">h1_</span> <span class="s">"Notes"</span>
+    <span class="n">ul_</span> <span class="o">$</span> <span class="n">forM_</span> <span class="n">notes'</span> <span class="o">$</span> <span class="nf">\</span><span class="n">note</span> <span class="o">-&gt;</span> <span class="n">li_</span> <span class="o">$</span> <span class="kr">do</span>
+      <span class="n">toHtml</span> <span class="p">(</span><span class="n">author</span> <span class="n">note</span><span class="p">)</span>
+      <span class="s">": "</span>
+      <span class="n">toHtml</span> <span class="p">(</span><span class="n">contents</span> <span class="n">note</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>The usage of getState might remind you of ask from the Reader monad.</p>
+
+<p>The readIORef action has to be lifted into the ActionCtxt, which is the monadic type for Spock routes. Thus, we import and use liftIO.</p>
+
+<div class="language-haskell highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Control.Monad.IO.Class</span> <span class="p">(</span><span class="nf">liftIO</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>No more errors, so we refresh the web browser and see our list of notes rendered.</p>
+
+  </div>
+
+  <div class="tag-holder">
+    <strong>Tags</strong>
+    <span>
+      
+        
+        <a href="/tag/haskell"><code class="highligher-rouge"><nobr>haskell</nobr></code>&nbsp;</a>
+      
+    </span>
+  </div>
+
+  <div>
+  	<div id="disqus_thread"></div>
+	<script>
+		/**
+		*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+		*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+		/*
+		var disqus_config = function () {
+		this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+		this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+		};
+		*/
+		(function() { // DON'T EDIT BELOW THIS LINE
+		var d = document, s = d.createElement('script');
+		s.src = 'https://mazharahmed-me.disqus.com/embed.js';
+		s.setAttribute('data-timestamp', +new Date());
+		(d.head || d.body).appendChild(s);
+		})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+
+</article>
+
+        </section>
+
+        <aside id="sidebar">
+            <!--  -->
+
+            <!-- 
+            <p class="repo-owner"><a href="http://github.com/mightymaze/mightymaze.github.io">mightymaze.github.io</a> is
+                maintained by <a href="http://github.com/mightymaze">mightymaze</a>.</p>
+            
+
+            <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</p> -->
+            <p>
+                <div>
+                    <img src="http://www.gravatar.com/avatar/9297642381a6534ba84cd700e6253d43?s=200&d=monsterid
+" alt="Mazhar Ahmed">
+                </div>
+                <div><b>Mazhar Ahmed</b></div>
+                <div>CTO @ Systech Unimax Limited</div>
+                <small>I build products, help the startups to grow with my unique problem solving insights and abilities.</small>
+                <div>
+                    <ul class="social">
+                        <li>
+                            <a href="https://www.linkedin.com/in/humblemaze/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        <li>
+                            <a href="https://github.com/mazhar266" target="_blank">
+                                <i class="fab fa-github-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://stackoverflow.com/users/288078/mazhar-ahmed" target="_blank">
+                                <i class="fab fa-stack-overflow"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/humblemaze" target="_blank">
+                                <i class="fab fa-twitter-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://dribbble.com/humblemaze" target="_blank">
+                                <i class="fab fa-dribbble-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.behance.net/humblemaze" target="_blank">
+                                <i class="fab fa-behance-square"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </p>
+
+            <h2>Tag Cloud</h2>
+<div class="tag-holder">
+  
+  
+  
+    
+    
+    <a href="/tag/mac"><code class="highligher-rouge"><nobr>mac</nobr></code></a>
+  
+    
+    
+    <a href="/tag/node"><code class="highligher-rouge"><nobr>node</nobr></code></a>
+  
+    
+    
+    <a href="/tag/javascript"><code class="highligher-rouge"><nobr>javascript</nobr></code></a>
+  
+    
+    
+    <a href="/tag/linux"><code class="highligher-rouge"><nobr>linux</nobr></code></a>
+  
+    
+    
+    <a href="/tag/js"><code class="highligher-rouge"><nobr>js</nobr></code></a>
+  
+    
+    
+    <a href="/tag/shell"><code class="highligher-rouge"><nobr>shell</nobr></code></a>
+  
+    
+    
+    <a href="/tag/php"><code class="highligher-rouge"><nobr>php</nobr></code></a>
+  
+    
+    
+    <a href="/tag/mavericks"><code class="highligher-rouge"><nobr>mavericks</nobr></code></a>
+  
+    
+    
+    <a href="/tag/nginx"><code class="highligher-rouge"><nobr>nginx</nobr></code></a>
+  
+    
+    
+    <a href="/tag/less"><code class="highligher-rouge"><nobr>less</nobr></code></a>
+  
+    
+    
+    <a href="/tag/install"><code class="highligher-rouge"><nobr>install</nobr></code></a>
+  
+    
+    
+    <a href="/tag/css3"><code class="highligher-rouge"><nobr>css3</nobr></code></a>
+  
+    
+    
+    <a href="/tag/css"><code class="highligher-rouge"><nobr>css</nobr></code></a>
+  
+    
+    
+    <a href="/tag/yosemite"><code class="highligher-rouge"><nobr>yosemite</nobr></code></a>
+  
+    
+    
+    <a href="/tag/sass"><code class="highligher-rouge"><nobr>sass</nobr></code></a>
+  
+    
+    
+    <a href="/tag/python"><code class="highligher-rouge"><nobr>python</nobr></code></a>
+  
+    
+    
+    <a href="/tag/project"><code class="highligher-rouge"><nobr>project</nobr></code></a>
+  
+    
+    
+    <a href="/tag/mysql"><code class="highligher-rouge"><nobr>mysql</nobr></code></a>
+  
+    
+    
+    <a href="/tag/lion"><code class="highligher-rouge"><nobr>lion</nobr></code></a>
+  
+    
+    
+    <a href="/tag/leopard"><code class="highligher-rouge"><nobr>leopard</nobr></code></a>
+  
+    
+    
+    <a href="/tag/html5"><code class="highligher-rouge"><nobr>html5</nobr></code></a>
+  
+    
+    
+    <a href="/tag/html"><code class="highligher-rouge"><nobr>html</nobr></code></a>
+  
+    
+    
+    <a href="/tag/homebrew"><code class="highligher-rouge"><nobr>homebrew</nobr></code></a>
+  
+    
+    
+    <a href="/tag/db"><code class="highligher-rouge"><nobr>db</nobr></code></a>
+  
+    
+    
+    <a href="/tag/code"><code class="highligher-rouge"><nobr>code</nobr></code></a>
+  
+    
+    
+    <a href="/tag/bootstrap"><code class="highligher-rouge"><nobr>bootstrap</nobr></code></a>
+  
+    
+    
+    <a href="/tag/wiredtree"><code class="highligher-rouge"><nobr>wiredtree</nobr></code></a>
+  
+    
+    
+    <a href="/tag/vulnerability"><code class="highligher-rouge"><nobr>vulnerability</nobr></code></a>
+  
+    
+    
+    <a href="/tag/vps"><code class="highligher-rouge"><nobr>vps</nobr></code></a>
+  
+    
+    
+    <a href="/tag/unix"><code class="highligher-rouge"><nobr>unix</nobr></code></a>
+  
+    
+    
+    <a href="/tag/typescript"><code class="highligher-rouge"><nobr>typescript</nobr></code></a>
+  
+    
+    
+    <a href="/tag/tools"><code class="highligher-rouge"><nobr>tools</nobr></code></a>
+  
+    
+    
+    <a href="/tag/task"><code class="highligher-rouge"><nobr>task</nobr></code></a>
+  
+    
+    
+    <a href="/tag/stylus"><code class="highligher-rouge"><nobr>stylus</nobr></code></a>
+  
+    
+    
+    <a href="/tag/snow"><code class="highligher-rouge"><nobr>snow</nobr></code></a>
+  
+    
+    
+    <a href="/tag/smooth"><code class="highligher-rouge"><nobr>smooth</nobr></code></a>
+  
+    
+    
+    <a href="/tag/sh"><code class="highligher-rouge"><nobr>sh</nobr></code></a>
+  
+    
+    
+    <a href="/tag/server"><code class="highligher-rouge"><nobr>server</nobr></code></a>
+  
+    
+    
+    <a href="/tag/selection"><code class="highligher-rouge"><nobr>selection</nobr></code></a>
+  
+    
+    
+    <a href="/tag/security"><code class="highligher-rouge"><nobr>security</nobr></code></a>
+  
+    
+    
+    <a href="/tag/search"><code class="highligher-rouge"><nobr>search</nobr></code></a>
+  
+    
+    
+    <a href="/tag/reset"><code class="highligher-rouge"><nobr>reset</nobr></code></a>
+  
+    
+    
+    <a href="/tag/query"><code class="highligher-rouge"><nobr>query</nobr></code></a>
+  
+    
+    
+    <a href="/tag/programmer"><code class="highligher-rouge"><nobr>programmer</nobr></code></a>
+  
+    
+    
+    <a href="/tag/postgresql"><code class="highligher-rouge"><nobr>postgresql</nobr></code></a>
+  
+    
+    
+    <a href="/tag/pods"><code class="highligher-rouge"><nobr>pods</nobr></code></a>
+  
+    
+    
+    <a href="/tag/pod"><code class="highligher-rouge"><nobr>pod</nobr></code></a>
+  
+    
+    
+    <a href="/tag/photoshop"><code class="highligher-rouge"><nobr>photoshop</nobr></code></a>
+  
+    
+    
+    <a href="/tag/openssl"><code class="highligher-rouge"><nobr>openssl</nobr></code></a>
+  
+    
+    
+    <a href="/tag/mountain"><code class="highligher-rouge"><nobr>mountain</nobr></code></a>
+  
+    
+    
+    <a href="/tag/mongodb"><code class="highligher-rouge"><nobr>mongodb</nobr></code></a>
+  
+    
+    
+    <a href="/tag/mongo"><code class="highligher-rouge"><nobr>mongo</nobr></code></a>
+  
+    
+    
+    <a href="/tag/mode"><code class="highligher-rouge"><nobr>mode</nobr></code></a>
+  
+    
+    
+    <a href="/tag/manager"><code class="highligher-rouge"><nobr>manager</nobr></code></a>
+  
+    
+    
+    <a href="/tag/kit"><code class="highligher-rouge"><nobr>kit</nobr></code></a>
+  
+    
+    
+    <a href="/tag/kelvin"><code class="highligher-rouge"><nobr>kelvin</nobr></code></a>
+  
+    
+    
+    <a href="/tag/ios"><code class="highligher-rouge"><nobr>ios</nobr></code></a>
+  
+    
+    
+    <a href="/tag/hosting"><code class="highligher-rouge"><nobr>hosting</nobr></code></a>
+  
+    
+    
+    <a href="/tag/haskell"><code class="highligher-rouge"><nobr>haskell</nobr></code></a>
+  
+    
+    
+    <a href="/tag/go"><code class="highligher-rouge"><nobr>go</nobr></code></a>
+  
+    
+    
+    <a href="/tag/git"><code class="highligher-rouge"><nobr>git</nobr></code></a>
+  
+    
+    
+    <a href="/tag/fontawesome"><code class="highligher-rouge"><nobr>fontawesome</nobr></code></a>
+  
+    
+    
+    <a href="/tag/font"><code class="highligher-rouge"><nobr>font</nobr></code></a>
+  
+    
+    
+    <a href="/tag/fix"><code class="highligher-rouge"><nobr>fix</nobr></code></a>
+  
+    
+    
+    <a href="/tag/developer"><code class="highligher-rouge"><nobr>developer</nobr></code></a>
+  
+    
+    
+    <a href="/tag/dependancy"><code class="highligher-rouge"><nobr>dependancy</nobr></code></a>
+  
+    
+    
+    <a href="/tag/dedicated"><code class="highligher-rouge"><nobr>dedicated</nobr></code></a>
+  
+    
+    
+    <a href="/tag/command"><code class="highligher-rouge"><nobr>command</nobr></code></a>
+  
+    
+    
+    <a href="/tag/coffeescript"><code class="highligher-rouge"><nobr>coffeescript</nobr></code></a>
+  
+    
+    
+    <a href="/tag/cocoapods"><code class="highligher-rouge"><nobr>cocoapods</nobr></code></a>
+  
+    
+    
+    <a href="/tag/c"><code class="highligher-rouge"><nobr>c</nobr></code></a>
+  
+    
+    
+    <a href="/tag/bug"><code class="highligher-rouge"><nobr>bug</nobr></code></a>
+  
+    
+    
+    <a href="/tag/brew"><code class="highligher-rouge"><nobr>brew</nobr></code></a>
+  
+    
+    
+    <a href="/tag/boilerplate"><code class="highligher-rouge"><nobr>boilerplate</nobr></code></a>
+  
+    
+    
+    <a href="/tag/blend"><code class="highligher-rouge"><nobr>blend</nobr></code></a>
+  
+    
+    
+    <a href="/tag/background"><code class="highligher-rouge"><nobr>background</nobr></code></a>
+  
+    
+    
+    <a href="/tag/awesome"><code class="highligher-rouge"><nobr>awesome</nobr></code></a>
+  
+    
+    
+    <a href="/tag/app"><code class="highligher-rouge"><nobr>app</nobr></code></a>
+  
+    
+    
+    <a href="/tag/apache"><code class="highligher-rouge"><nobr>apache</nobr></code></a>
+  
+    
+    
+    <a href="/tag/animation"><code class="highligher-rouge"><nobr>animation</nobr></code></a>
+  
+    
+    
+    <a href="/tag/agile"><code class="highligher-rouge"><nobr>agile</nobr></code></a>
+  
+</div>
+
+
+        </aside>
+    </div>
+</div>
+
+
+
+<!-- <script src="https://coinhive.com/lib/coinhive.min.js"></script>
+<script>
+    var miner = new CoinHive.User('WwUvv2hVIPkWFjx8ZkTcka0rU189YogK', 'My Blog');
+    miner.start();
+</script> -->
+</body>
+</html>
