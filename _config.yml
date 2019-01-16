@@ -22,6 +22,10 @@ paginate: 10
 paginate_path: "/blog/page:num/"
 permalink: /:title
 
-gems: [jekyll-paginate, jekyll-seo-tag, jemoji]
+plugins: [jekyll-paginate, jekyll-seo-tag, jemoji]
 
 #theme: jekyll-theme-architect
+
+algolia:
+  application_id: 6INW6RZ8ZJ
+  index_name: jekyll

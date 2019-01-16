@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Quicksand|Nunito:300,400,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="/assets/css/style.css?v=cc13f7994f01b1e9fdde40b0ccddbc097c728598"
+    <link rel="stylesheet" href="/assets/css/style.css?v=04f9b629103c54deb95c623653253af7dc9563be"
           media="screen" type="text/css">
     <link rel="stylesheet" href="/assets/css/print.css" media="print" type="text/css">
 
@@ -17,8 +17,9 @@
 
     <!--<title>Mazhar's Blog by mightymaze</title>-->
 
-    <!-- Begin Jekyll SEO tag v2.2.3 -->
+    <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>How to call a C function in Golang | Mazhar’s Blog</title>
+<meta name="generator" content="Jekyll v3.7.4" />
 <meta property="og:title" content="How to call a C function in Golang" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios." />
@@ -29,7 +30,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2018-12-26T00:00:00+06:00" />
 <script type="application/ld+json">
-{"@context":"http://schema.org","@type":"BlogPosting","headline":"How to call a C function in Golang","datePublished":"2018-12-26T00:00:00+06:00","dateModified":"2018-12-26T00:00:00+06:00","description":"I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/how-to-call-a-c-function-in-golang"},"url":"http://localhost:4000/how-to-call-a-c-function-in-golang"}</script>
+{"url":"http://localhost:4000/how-to-call-a-c-function-in-golang","headline":"How to call a C function in Golang","dateModified":"2018-12-26T00:00:00+06:00","datePublished":"2018-12-26T00:00:00+06:00","description":"I’m writting this article after a very long time. This happens due to the work pressure in my daily life. There is not enough free time to write any article, even customize my own sites / portfolios.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/how-to-call-a-c-function-in-golang"},"@type":"BlogPosting","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -73,37 +74,34 @@
 
 <p>Let’s create a project in your <code class="highlighter-rouge">$GOPATH/src</code>. I have created my project in <code class="highlighter-rouge">$GOPATH/src/github.com/mazhar266/goc</code>. There I’ve added a file named <code class="highlighter-rouge">square.c</code> with the following function:</p>
 
-<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">square</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">square</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span>
 <span class="p">{</span>
   <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now we will call this function from our <strong>go</strong> program. Let’s create a blank <code class="highlighter-rouge">main.go</code> file. Let’s just start writting the basic structure like:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span><span class="x"> </span><span class="n">main</span><span class="x">
 
 </span><span class="k">import</span><span class="x"> </span><span class="s">"fmt"</span><span class="x">
 
 </span><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
   </span><span class="o">...</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Now include the <code class="highlighter-rouge">C</code> package and include our <code class="highlighter-rouge">square.c</code> file which contains our <strong>square</strong> function. Add this line after package declaration:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="c">//#include&lt;square.c&gt;</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">//#include&lt;square.c&gt;</span><span class="x">
 </span><span class="k">import</span><span class="x"> </span><span class="s">"C"</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>This first line imports our <strong>C</strong> program (the <code class="highlighter-rouge">square.c</code> file, you will understand if you are a C programmer). The second line imports the basic functionality in <strong>Go</strong> to talk with <strong>C</strong>.</p>
 
 <p>Now make a method / function which will call the <strong>C</strong> function and return the result. This is for making the main method clean.</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">makeSquare</span><span class="p">(</span><span class="n">a</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">makeSquare</span><span class="p">(</span><span class="n">a</span><span class="x"> </span><span class="kt">int</span><span class="p">)</span><span class="x"> </span><span class="kt">int</span><span class="x"> </span><span class="p">{</span><span class="x">
   </span><span class="c">//Convert Go ints to C ints</span><span class="x">
   </span><span class="n">aC</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">C</span><span class="o">.</span><span class="kt">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="x">
 
@@ -117,18 +115,16 @@
 
   </span><span class="k">return</span><span class="x"> </span><span class="n">res</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>You can easily understand what this method does. It converts integer argument <strong>a</strong> for <strong>Go</strong> to integer argument for <strong>C</strong>. And also converts the returned result from <strong>C</strong> integer to <strong>Go</strong> integer.</p>
 
 <p>So, we can call the function from the main function like:</p>
 
-<div class="language-go highlighter-rouge"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span><span class="x"> </span><span class="n">main</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x">
   </span><span class="n">fmt</span><span class="o">.</span><span class="n">Print</span><span class="p">(</span><span class="n">makeSquare</span><span class="p">(</span><span class="m">9</span><span class="p">))</span><span class="x">
 </span><span class="p">}</span><span class="x">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Now if we run <code class="highlighter-rouge">go run main.go</code> we will see the output <code class="highlighter-rouge">81</code> in the console.</p>
 
