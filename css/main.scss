@@ -51,3 +51,7 @@ $on-laptop:        800px;
         "layout",
         "syntax-highlighting"
 ;
+
+#hits, #pagination {
+    display: none !important;
+}

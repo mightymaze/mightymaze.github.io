@@ -1,4 +1,14 @@
-mightymaze.github.io
+www.mazharahmed.me
 ====================
 
-demo web
+My Personal blog in Jekyll
+
+## Requirements
+
+- Ruby
+- Gem
+- Bundler
+- Jekyll
+- Algolia
+- Jekyll Admin
+- Python 2 or 3

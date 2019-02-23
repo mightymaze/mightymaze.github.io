@@ -1,4 +1,6 @@
-mightymaze.github.io
+www.mazharahmed.me
 ====================
 
-demo web
+My Personal blog in Jekyll
+
+

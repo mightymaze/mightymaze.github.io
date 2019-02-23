@@ -6,9 +6,108 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 17 Jan 2019 02:27:26 +0600</pubDate>
-    <lastBuildDate>Thu, 17 Jan 2019 02:27:26 +0600</lastBuildDate>
+    <pubDate>Sat, 23 Feb 2019 11:04:11 +0600</pubDate>
+    <lastBuildDate>Sat, 23 Feb 2019 11:04:11 +0600</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
+    
+      <item>
+        <title>Generate REST API from DB Schema in Crystal</title>
+        <description>&lt;p&gt;I had a MySQL schema from a booking.com like platform. I wanted to generate REST API very fast from my MySQL database tables. Like I have a table named &lt;code class=&quot;highlighter-rouge&quot;&gt;hotels&lt;/code&gt;. I want to generate following endpoints:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET    /api/hotels
+GET    /api/hotels/:id
+POST   /api/hotels
+PUT    /api/hotels/:id
+DELETE /api/hotels/:id
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I tried to use &lt;strong&gt;Haskell&lt;/strong&gt; but the security was very low on &lt;code class=&quot;highlighter-rouge&quot;&gt;postgrest&lt;/code&gt; package in &lt;strong&gt;Haskell&lt;/strong&gt;.  The &lt;strong&gt;postgrest&lt;/strong&gt; is amazing, it generates the api endpoints from a database. But the problem is it will delete all the rows in a table if I perform a &lt;em&gt;DELETE&lt;/em&gt; request in &lt;code class=&quot;highlighter-rouge&quot;&gt;/api/hotels&lt;/code&gt;. So, I can not use it.&lt;/p&gt;
+
+&lt;p&gt;Finally found that &lt;code class=&quot;highlighter-rouge&quot;&gt;Kemal Rest API&lt;/code&gt; is the perfect for doing this which is on &lt;strong&gt;Crystal Lang&lt;/strong&gt;. Suppose I have a table named &lt;code class=&quot;highlighter-rouge&quot;&gt;hotels&lt;/code&gt;. This is what I did. I installed &lt;strong&gt;Crystal Lang&lt;/strong&gt;. I ran &lt;code class=&quot;highlighter-rouge&quot;&gt;shards init app hotel&lt;/code&gt; to generate an empty project. &lt;code class=&quot;highlighter-rouge&quot;&gt;shards&lt;/code&gt; is the dependency manager, task runner for crystal. So after this I have a folder named hotel which has the following structure:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+├── LICENSE
+├── README.md
+├── db.sql
+├── shard.lock
+├── shard.yml
+├── spec
+│   ├── hotel_spec.cr
+│   └── spec_helper.cr
+└── src
+    └── hotel.cr
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I have modified the &lt;code class=&quot;highlighter-rouge&quot;&gt;shard.yml&lt;/code&gt; file and added following lines at the end.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dependencies:
+  db:
+    github: crystal-lang/crystal-db
+  kemal:
+    github: kemalcr/kemal
+  kemal-rest-api:
+    github: blocknotes/kemal-rest-api
+  mysql:
+    github: crystal-lang/crystal-mysql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I have ran the &lt;code class=&quot;highlighter-rouge&quot;&gt;shards install&lt;/code&gt; to install the libraries and modified the &lt;code class=&quot;highlighter-rouge&quot;&gt;hotel.cr&lt;/code&gt; file like following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-crystal&quot;&gt;require &quot;db&quot;
+require &quot;mysql&quot;
+require &quot;kemal&quot;
+require &quot;kemal-rest-api&quot;
+require &quot;json&quot;
+
+DB_NAME       = &quot;hotel&quot;
+DB_CONNECTION = &quot;mysql://hotel@localhost/#{DB_NAME}&quot;
+
+class MyModel &amp;lt; KemalRestApi::Adapters::CrystalDbModel
+  def initialize
+    super DB_CONNECTION, &quot;hotels&quot;
+  end
+end
+
+module WebApp
+  res = KemalRestApi::Resource.new MyModel.new, KemalRestApi::ALL_ACTIONS, prefix: &quot;api&quot;, singular: &quot;hotel&quot;
+
+  # Routes
+  get &quot;/&quot; do |env|
+    env.response.content_type = &quot;application/json&quot;
+    {name: &quot;--&quot;, info: &quot;--&quot;, version: &quot;0.0.1&quot;}.to_json
+  end
+
+  res.generate_routes!
+
+  # Starts Kemal
+  Kemal.run
+end
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;to generate these routes automatically:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GET    /api/hotels
+GET    /api/hotels/:id
+POST   /api/hotels
+PUT    /api/hotels/:id
+DELETE /api/hotels/:id
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;At last I have ran &lt;code class=&quot;highlighter-rouge&quot;&gt;shards build&lt;/code&gt; to make the binary executable file. And ran it like &lt;code class=&quot;highlighter-rouge&quot;&gt;./bin/hotel&lt;/code&gt;. And the API is working properly.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;Crystal&lt;/strong&gt; code is just like &lt;strong&gt;Ruby&lt;/strong&gt; language but as fast as &lt;strong&gt;C&lt;/strong&gt;. What I need to do next is make an array of tables and it will generate the API endpoints. I don’t need to take hassle about images and users because we already have other microservices to handle those. Also, this API will never be exposed to clients rather another API wrapper will fetch data from it. So, I found it perfect fit for my job.&lt;/p&gt;
+
+&lt;p&gt;Thus I have made my hotel API up in just couple of hours.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 23 Feb 2019 00:00:00 +0600</pubDate>
+        <link>http://localhost:4000/generate-rest-api-from-db-schema-in-crystal</link>
+        <guid isPermaLink="true">http://localhost:4000/generate-rest-api-from-db-schema-in-crystal</guid>
+        
+        <category>crystal</category>
+        
+        <category>haskell</category>
+        
+        
+      </item>
     
       <item>
         <title>Your First Web Application with Spock</title>
@@ -773,27 +872,6 @@ $ sudo ufw reset
         <category>javascript</category>
         
         <category>js</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>English dictionary text file</title>
-        <description>&lt;p&gt;Couple of days before, I was making a search engine for my two projects. One project was using Elasticsearch and another one was using Apache Solr. For them both I needed a file containing all the words from an English dictionary.&lt;/p&gt;
-
-&lt;p&gt;I search here and there and finally found that every unix like system has this kind of file with it to predict text. I was using and iMac. I found the text file in the following location:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/share/dict/words&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;My work is done, I used the file and rebuild the Apache Solr dictionary.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 25 Mar 2015 06:45:02 +0600</pubDate>
-        <link>http://localhost:4000/english-dictionary-text-file</link>
-        <guid isPermaLink="true">http://localhost:4000/english-dictionary-text-file</guid>
-        
-        <category>mac</category>
-        
-        <category>linux</category>
         
         
       </item>
