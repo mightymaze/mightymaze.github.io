@@ -6,9 +6,104 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 23 Feb 2019 11:04:11 +0600</pubDate>
-    <lastBuildDate>Sat, 23 Feb 2019 11:04:11 +0600</lastBuildDate>
+    <pubDate>Thu, 28 Mar 2019 09:32:44 +0600</pubDate>
+    <lastBuildDate>Thu, 28 Mar 2019 09:32:44 +0600</lastBuildDate>
     <generator>Jekyll v3.7.4</generator>
+    
+      <item>
+        <title>Use Gearman Job Server in PHP</title>
+        <description>&lt;p&gt;Gearman is a Job Server which has many language interfaces. If you are familiar with Python Celery then you will understand at a glance. Unlike Celery, Gearman is a task runner. The only difference is in Gearman, you have to program your worker too. I love Gearman because not only tasks but also the worker can be written with any suitable language. Also the core of Gearman is built with C/C++, that’s why it is very very fast. Say, you are working with PHP and you need a background task runner, go for Gearman. Don’t worry, many big companies are using it like  Craig’s List, Tumblr, Yelp, Etsy etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/stack.png&quot; alt=&quot;How Does Gearman Work&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, let’s create a Background Task Runner for our PHP Application. To do that we need to install gearman server on our PC / Server first. If we are using Ubuntu then it is very easy like &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt install gearman-job-server&lt;/code&gt; and there are tons of article how to install gearman. Feel free to install it first. Then we have to install the PHP PECL extension for gearman. In Ubuntu we can simply run &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo pecl install gearman&lt;/code&gt;. Again, there are tons of articles on how to install gearman libraries on your PHP. When you have done with the installations, let’s jump directly into coding. Don’t forget to run the &lt;strong&gt;gearman job server&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;First lets make the worker. Make a new file named &lt;code class=&quot;highlighter-rouge&quot;&gt;gearman-worker.php&lt;/code&gt; with:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;GearmanWorker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addServer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// additional server address can be passed here
+&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addFunction&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;ping&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;GearmanJob&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$job&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;received: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sending data: ping &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            
+            &lt;span class=&quot;nv&quot;&gt;$job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sendData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ping &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$x&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;waiting&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// your other function defination goes here or you may call other files / modules etc
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;waiting&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$worker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;work&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s our simple worker with a function named &lt;strong&gt;ping&lt;/strong&gt;. You can add your other functions too. Now let’s make a client and call that function we just created. Make a file named &lt;code class=&quot;highlighter-rouge&quot;&gt;gearman-client.php&lt;/code&gt; with following content:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;GearmanClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addServer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDataCallback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;GearmanTask&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;data: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$task&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sending&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addTask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ping&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// you can also call tasks async using $client-&amp;gt;doBackground()
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;runTasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we have to keep the worker running. Simply just keep the worker running in our terminal like &lt;code class=&quot;highlighter-rouge&quot;&gt;php gearman-worker.php&lt;/code&gt; and then run the client from another terminal like &lt;code class=&quot;highlighter-rouge&quot;&gt;php gearman-client.php&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If we look at the client terminal its output is like:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sending
+data: ping 1
+data: ping 2
+data: ping 3
+data: ping 4
+data: ping 5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And the worker terminal will output like:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;waiting
+received: H:[network id]:[task id]
+sending data: ping 1
+sending data: ping 2
+sending data: ping 3
+sending data: ping 4
+sending data: ping 5
+waiting
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note: You have to keep the worker running.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is a simple way of making own worker using Gearman. There are plenty of ways we can use gearman and that’s the fun of using it. Hope you guys like it.&lt;/p&gt;
+
+&lt;p&gt;Thanks a lot.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 28 Mar 2019 00:00:00 +0600</pubDate>
+        <link>http://localhost:4000/use-gearman-job-server-in-php</link>
+        <guid isPermaLink="true">http://localhost:4000/use-gearman-job-server-in-php</guid>
+        
+        <category>php</category>
+        
+        
+      </item>
     
       <item>
         <title>Generate REST API from DB Schema in Crystal</title>
@@ -835,43 +930,6 @@ $ sudo ufw reset
         <guid isPermaLink="true">http://localhost:4000/mastering-ufw-on-ubuntu</guid>
         
         <category>linux</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>How I wrote 66K lines of JavaScript in 10 days</title>
-        <description>&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/2015/Mar/4995737599_0f6f878846_z.jpg&quot; alt=&quot;alt&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Actually I wrote more than 66K lines of codes, But I’ve removed the view files code because they are not mine. Writing 66K lines of code doesn’t mean anything special. Anyone can write tons of lines of codes. What matters is writing production level of codes. Codes that construct a product which people will pay to use.&lt;/p&gt;
-
-&lt;p&gt;I’m not going to lecture here about what product is and what art is. I’m here to tell you how I wrote those lines of codes in a short amount of time. Obviously the first step you need is to be an empire in programming. There’s no other way or exception, and of-course being this level of code artist takes many days of hard work. It’s not the hard work which will make you a code empire, it’s the intelligence which matters at the end.&lt;/p&gt;
-
-&lt;p&gt;The second thing you need to do is update your coding style so that your code is capable of working in a team. You need to work with a team to achieve this capability. Without practical knowledge no matter how hard you think your code is Okay, your code is gurbase. You have to indent, comment, document, normalize your code to be at this level.&lt;/p&gt;
-
-&lt;p&gt;Then you need to have your own snippet library. You will take the snippets to your codes. This will not come easily. You need to work with a highly qualified team for at least four years to build your own snippet. You can copy other’s snippet, but that will not come in handy when it’s time to use it. Always remember your code is your code, others are not yours.&lt;/p&gt;
-
-&lt;p&gt;You need to use many external tools which will boost your productivity. Like you need to use a &lt;strong&gt;Pomodoro&lt;/strong&gt; clock, you need to use logs while code. You can use a raw dashboard to keep logs. My Mac’s dashboard works fine for me.&lt;/p&gt;
-
-&lt;p&gt;As you will be writing production level of codes your code has to be bug free or tested. I will say that there will be no bug, but your code has to be less buggy. To do this, you need to use unit testing. If you are over confident, then you can also use a continuous integration system. Whatever you do, your code needs to have a confident to work accurately. At this level semicolon (;) missing, spell mistake, case sensitivity mistake are not accepted.&lt;/p&gt;
-
-&lt;p&gt;You need to use an &lt;strong&gt;IDE&lt;/strong&gt;. Most people will prefer Sublime Text. But it’s not actually an IDE in my sense. If you use Sublime Text you will find that finding critical errors are very time-consuming work. IDE will help you in this area. At this level you are a code empire, so an empire needs his crown and it’s an IDE. I use Zend Studio for PHP, WebStorm for JavaScript. There are other exceptions too while working in a very large project which I will write at my next-post.&lt;/p&gt;
-
-&lt;p&gt;If you made yourself this far you are the true code empire, more accurately you are a code artist, a rock-star coder. Remember, never compromise the brotherhood. Your team members are working with you, they have to understand your code at a glance. You cannot thing twice while looking at your old codes. You code is not very simple, but solves everything. Your code contains enough comments, indents and documents. They are well structured and followed by popular coding standards. You have tons of code snippets and all of them are prioritized according to your needs. You’ve assigned hot keys to quickly access your snippet library. You now work using the famous Pomodoro technique.&lt;/p&gt;
-
-&lt;p&gt;Now what’s left is practise, take your skill to the edge. Be a cutting-edge artist. Be a &lt;strong&gt;rock-star coder&lt;/strong&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 28 Mar 2015 03:38:18 +0600</pubDate>
-        <link>http://localhost:4000/how-i-wrote-66k-lines-of-javascript-in-10-days</link>
-        <guid isPermaLink="true">http://localhost:4000/how-i-wrote-66k-lines-of-javascript-in-10-days</guid>
-        
-        <category>code</category>
-        
-        <category>project</category>
-        
-        <category>javascript</category>
-        
-        <category>js</category>
         
         
       </item>

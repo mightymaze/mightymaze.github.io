@@ -22,17 +22,19 @@
     <!--<title>Mazhar's Blog by mightymaze</title>-->
 
     <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Tag: boilerplate | Mazhar’s Blog</title>
+<title>Use Gearman Job Server in PHP | Mazhar’s Blog</title>
 <meta name="generator" content="Jekyll v3.7.4" />
-<meta property="og:title" content="Tag: boilerplate" />
+<meta property="og:title" content="Use Gearman Job Server in PHP" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander" />
-<meta property="og:description" content="Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander" />
-<link rel="canonical" href="http://localhost:4000/tag/boilerplate" />
-<meta property="og:url" content="http://localhost:4000/tag/boilerplate" />
+<meta name="description" content="Gearman is a Job Server which has many language interfaces. If you are familiar with Python Celery then you will understand at a glance. Unlike Celery, Gearman is a task runner. The only difference is in Gearman, you have to program your worker too. I love Gearman because not only tasks but also the worker can be written with any suitable language. Also the core of Gearman is built with C/C++, that’s why it is very very fast. Say, you are working with PHP and you need a background task runner, go for Gearman. Don’t worry, many big companies are using it like Craig’s List, Tumblr, Yelp, Etsy etc." />
+<meta property="og:description" content="Gearman is a Job Server which has many language interfaces. If you are familiar with Python Celery then you will understand at a glance. Unlike Celery, Gearman is a task runner. The only difference is in Gearman, you have to program your worker too. I love Gearman because not only tasks but also the worker can be written with any suitable language. Also the core of Gearman is built with C/C++, that’s why it is very very fast. Say, you are working with PHP and you need a background task runner, go for Gearman. Don’t worry, many big companies are using it like Craig’s List, Tumblr, Yelp, Etsy etc." />
+<link rel="canonical" href="http://localhost:4000/use-gearman-job-server-in-php" />
+<meta property="og:url" content="http://localhost:4000/use-gearman-job-server-in-php" />
 <meta property="og:site_name" content="Mazhar’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-28T00:00:00+06:00" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"http://localhost:4000/tag/boilerplate","headline":"Tag: boilerplate","description":"Entrepreneur, Product Enthusiast, Tech Expert, Designer, Brander","@context":"http://schema.org"}</script>
+{"datePublished":"2019-03-28T00:00:00+06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/use-gearman-job-server-in-php"},"@type":"BlogPosting","url":"http://localhost:4000/use-gearman-job-server-in-php","headline":"Use Gearman Job Server in PHP","description":"Gearman is a Job Server which has many language interfaces. If you are familiar with Python Celery then you will understand at a glance. Unlike Celery, Gearman is a task runner. The only difference is in Gearman, you have to program your worker too. I love Gearman because not only tasks but also the worker can be written with any suitable language. Also the core of Gearman is built with C/C++, that’s why it is very very fast. Say, you are working with PHP and you need a background task runner, go for Gearman. Don’t worry, many big companies are using it like Craig’s List, Tumblr, Yelp, Etsy etc.","dateModified":"2019-03-28T00:00:00+06:00","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -59,17 +61,133 @@
         
 
         <section id="main-content">
-            <div class="post">
-<h1>Tag: boilerplate</h1>
-<ul>
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <li><a href="/another-html5-boilerplate">Another HTML5 Boilerplate</a> (06 Apr 2014)<br>
-    
-  </li>
+  <div class="post-header">
+    <h1 class="post-title" itemprop="name headline">Use Gearman Job Server in PHP</h1>
+    <p class="post-meta"><time datetime="2019-03-28T00:00:00+06:00" itemprop="datePublished">Mar 28, 2019</time></p>
+  </div>
 
-</ul>
-</div>
-<hr>
+  <div class="post-content" itemprop="articleBody">
+    <p>Gearman is a Job Server which has many language interfaces. If you are familiar with Python Celery then you will understand at a glance. Unlike Celery, Gearman is a task runner. The only difference is in Gearman, you have to program your worker too. I love Gearman because not only tasks but also the worker can be written with any suitable language. Also the core of Gearman is built with C/C++, that’s why it is very very fast. Say, you are working with PHP and you need a background task runner, go for Gearman. Don’t worry, many big companies are using it like  Craig’s List, Tumblr, Yelp, Etsy etc.</p>
+
+<p><img src="http://localhost:4000/stack.png" alt="How Does Gearman Work" /></p>
+
+<p>Now, let’s create a Background Task Runner for our PHP Application. To do that we need to install gearman server on our PC / Server first. If we are using Ubuntu then it is very easy like <code class="highlighter-rouge">sudo apt install gearman-job-server</code> and there are tons of article how to install gearman. Feel free to install it first. Then we have to install the PHP PECL extension for gearman. In Ubuntu we can simply run <code class="highlighter-rouge">sudo pecl install gearman</code>. Again, there are tons of articles on how to install gearman libraries on your PHP. When you have done with the installations, let’s jump directly into coding. Don’t forget to run the <strong>gearman job server</strong>.</p>
+
+<p>First lets make the worker. Make a new file named <code class="highlighter-rouge">gearman-worker.php</code> with:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$worker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GearmanWorker</span><span class="p">();</span>
+<span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">addServer</span><span class="p">();</span> <span class="c1">// additional server address can be passed here
+</span>
+<span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">addFunction</span><span class="p">(</span>
+    <span class="s2">"ping"</span><span class="p">,</span>
+    <span class="k">function</span> <span class="p">(</span><span class="nx">GearmanJob</span> <span class="nv">$job</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">print</span> <span class="s2">"received: </span><span class="si">{</span><span class="nv">$job</span><span class="o">-&gt;</span><span class="na">handle</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+        
+        <span class="k">for</span> <span class="p">(</span><span class="nv">$x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="nv">$x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">print</span> <span class="s2">"sending data: ping </span><span class="si">{</span><span class="nv">$x</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+            
+            <span class="nv">$job</span><span class="o">-&gt;</span><span class="na">sendData</span><span class="p">(</span><span class="s2">"ping </span><span class="si">{</span><span class="nv">$x</span><span class="si">}</span><span class="s2">"</span><span class="p">);</span>
+            <span class="nb">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        
+        <span class="k">print</span> <span class="s2">"waiting</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="c1">// your other function defination goes here or you may call other files / modules etc
+</span>
+<span class="k">print</span> <span class="s2">"waiting</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="nv">$worker</span><span class="o">-&gt;</span><span class="na">work</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>That’s our simple worker with a function named <strong>ping</strong>. You can add your other functions too. Now let’s make a client and call that function we just created. Make a file named <code class="highlighter-rouge">gearman-client.php</code> with following content:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GearmanClient</span><span class="p">();</span>
+<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">addServer</span><span class="p">();</span>
+
+<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">setDataCallback</span><span class="p">(</span>
+    <span class="k">function</span> <span class="p">(</span><span class="nx">GearmanTask</span> <span class="nv">$task</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">print</span> <span class="s2">"data: </span><span class="si">{</span><span class="nv">$task</span><span class="o">-&gt;</span><span class="na">data</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="k">print</span> <span class="s2">"sending</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+
+<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">addTask</span><span class="p">(</span><span class="s2">"ping"</span><span class="p">,</span> <span class="s2">"hello"</span><span class="p">);</span>
+<span class="c1">// you can also call tasks async using $client-&gt;doBackground()
+</span><span class="nv">$client</span><span class="o">-&gt;</span><span class="na">runTasks</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Now we have to keep the worker running. Simply just keep the worker running in our terminal like <code class="highlighter-rouge">php gearman-worker.php</code> and then run the client from another terminal like <code class="highlighter-rouge">php gearman-client.php</code>.</p>
+
+<p>If we look at the client terminal its output is like:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sending
+data: ping 1
+data: ping 2
+data: ping 3
+data: ping 4
+data: ping 5
+</code></pre></div></div>
+
+<p>And the worker terminal will output like:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>waiting
+received: H:[network id]:[task id]
+sending data: ping 1
+sending data: ping 2
+sending data: ping 3
+sending data: ping 4
+sending data: ping 5
+waiting
+</code></pre></div></div>
+
+<blockquote>
+  <p>Note: You have to keep the worker running.</p>
+</blockquote>
+
+<p>This is a simple way of making own worker using Gearman. There are plenty of ways we can use gearman and that’s the fun of using it. Hope you guys like it.</p>
+
+<p>Thanks a lot.</p>
+
+  </div>
+
+  <div class="tag-holder">
+    <strong>Tags</strong>
+    <span>
+      
+        
+        <a href="/tag/php"><code class="highligher-rouge"><nobr>php</nobr></code>&nbsp;</a>
+      
+    </span>
+  </div>
+
+  <div>
+  	<div id="disqus_thread"></div>
+	<script>
+		/**
+		*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+		*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+		/*
+		var disqus_config = function () {
+		this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+		this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+		};
+		*/
+		(function() { // DON'T EDIT BELOW THIS LINE
+		var d = document, s = d.createElement('script');
+		s.src = 'https://mazharahmed-me.disqus.com/embed.js';
+		s.setAttribute('data-timestamp', +new Date());
+		(d.head || d.body).appendChild(s);
+		})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+
+</article>
 
         </section>
 
