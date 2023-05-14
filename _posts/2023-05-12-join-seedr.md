@@ -24,4 +24,4 @@ Seedr.cc is a cloud-based service that allows users to download and stream torre
 It's always a good practice to visit the official Seedr.cc website to get the most up-to-date and accurate information about their services, features, and terms of use.
 
 Join now:
-Website URL: [https://www.seedr.cc](https://www.seedr.cc)
+Website URL: [https://www.seedr.cc/](https://www.seedr.cc/)
